@@ -4,6 +4,6 @@ Nesse projeto de Gerenciamento de Projetos Desenvolvemos um portal de notícias 
 
 # Dependencias Front end:
 
-react-router-dom
-react-redux
+react-router-dom  
+react-redux  
 @reduxjs/toolkit
