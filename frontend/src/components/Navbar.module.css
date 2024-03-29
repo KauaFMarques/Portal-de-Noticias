@@ -1,0 +1,111 @@
+.navbar_fixed_div {
+  position: fixed;
+  width: 100%;
+  top: 0;
+}
+
+.navbar {
+  padding: 20px 30px;
+  background-color: #fff;
+  position: relative;
+  border-bottom: 1px solid var(--border-color-primaria);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav_links {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  right: 30px;
+}
+
+.nav_links a {
+  cursor: pointer;
+  border-radius: 5px;
+  text-wrap: nowrap;
+  padding: 5px 10px 7px 10px;
+  transition: 0.2s;
+  margin-left: 5px;
+}
+
+.nav_links a:hover {
+  background-color: #f7f6f5;
+}
+
+a.navbar_signup_button {
+  margin-left: 10px;
+  border-radius: 5px;
+  background-color: #0787ca;
+  padding: 5px 19px 7px 19px;
+  font-weight: bold;
+  color: #fff;
+  transition: 0.2s;
+}
+
+a.navbar_signup_button:hover {
+  border-radius: 5px;
+  background-color: #0748ca;
+  color: #fff;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5em;
+}
+
+.search_div {
+  width: 25%;
+  position: absolute;
+  left: 30px;
+}
+
+.search_div input {
+  width: 100%;
+  padding: 0px 10px 0px 30px;
+  box-sizing: border-box;
+  height: 30px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #000;
+}
+
+.search_div svg {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.sublinks_navbar {
+  margin-top: 86px;
+  display: flex;
+  justify-content: center;
+  padding: 5px 0px 5px 0px;
+  box-shadow: 0 3px 3px 0 rgba(211, 202, 197, 1);
+}
+
+ul li a:hover {
+  background-color: #f7f6f5;
+}
+
+ul li a {
+  display: block;
+  padding: 5px 10px 7px 10px;
+  border-radius: 5px;
+  font-size: 0.8em;
+
+  font-weight: 500;
+}
+
+ul li a {
+  color: #55534f;
+}
+
+.sublinks_navbar ul {
+  display: flex;
+}
+
+.sublinks_navbar ul li {
+  margin-right: 10px;
+}
