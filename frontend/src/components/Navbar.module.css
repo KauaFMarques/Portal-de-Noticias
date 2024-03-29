@@ -34,22 +34,6 @@
   background-color: #f7f6f5;
 }
 
-a.navbar_signup_button {
-  margin-left: 10px;
-  border-radius: 5px;
-  background-color: #0787ca;
-  padding: 5px 19px 7px 19px;
-  font-weight: bold;
-  color: #fff;
-  transition: 0.2s;
-}
-
-a.navbar_signup_button:hover {
-  border-radius: 5px;
-  background-color: #0748ca;
-  color: #fff;
-}
-
 h1 {
   text-align: center;
   font-size: 2.5em;
@@ -61,7 +45,7 @@ h1 {
   left: 30px;
 }
 
-.search_div input {
+.search_div input.input_search {
   width: 100%;
   padding: 0px 10px 0px 30px;
   box-sizing: border-box;
@@ -94,12 +78,8 @@ ul li a {
   padding: 5px 10px 7px 10px;
   border-radius: 5px;
   font-size: 0.8em;
-
-  font-weight: 500;
-}
-
-ul li a {
   color: #55534f;
+  font-weight: 500;
 }
 
 .sublinks_navbar ul {
