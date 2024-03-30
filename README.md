@@ -6,5 +6,5 @@ Nesse projeto de Gerenciamento de Projetos Desenvolvemos um portal de notícias 
 
 react-router-dom  
 react-redux  
-@reduxjs/toolkit
+@reduxjs/toolkit  
 @iconify/react
