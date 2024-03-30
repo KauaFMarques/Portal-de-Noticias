@@ -18,7 +18,7 @@
   display: flex;
   position: absolute;
   align-items: center;
-  right: 30px;
+  right: 145px;
 }
 
 .nav_links a {
@@ -40,9 +40,9 @@ h1 {
 }
 
 .search_div {
-  width: 25%;
+  width: 16%;
   position: absolute;
-  left: 30px;
+  left: 145px;
 }
 
 .search_div input.input_search {
@@ -52,7 +52,7 @@ h1 {
   height: 30px;
   border-radius: 5px;
   outline: none;
-  border: 1px solid #000;
+  border: 1px solid var(--border-color-primaria);
 }
 
 .search_div svg {

@@ -1,0 +1,16 @@
+.home_container {
+  max-width: 1230px;
+  padding: 40px 0px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.noticias_laterais {
+  border-bottom: 1px solid var(--border-color-primaria);
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0px;
+}

@@ -13,7 +13,11 @@ const Navbar = () => {
           <div className={styles.navbar_fixed_div}>
             <div className={styles.navbar}>
               <div className={styles.search_div}>
-                <Icon icon="mi:search" style={{ color: "#000" }} width={21} />
+                <Icon
+                  icon="mi:search"
+                  style={{ color: "#707c89" }}
+                  width={21}
+                />
                 <input type="text" className={styles.input_search} />
               </div>
               <Link to={"/"}>
