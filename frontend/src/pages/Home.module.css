@@ -1,0 +1,43 @@
+.home_container {
+  max-width: 1230px;
+  padding: 40px 0px;
+  margin: 0 auto;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.div_noticias_laterais {
+  padding-left: 45px;
+}
+
+.noticias_laterais {
+  border-bottom: 1px solid var(--border-color-primaria);
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0px;
+}
+
+.h1_ultimas_noticias {
+  margin-top: 60px;
+
+  border-top: 1px solid var(--border-color-primaria);
+  border-bottom: 1px solid var(--border-color-primaria);
+  padding: 22px 0px;
+}
+
+.div_ultimas_noticias {
+  padding: 33px 0px;
+  border-top: 1px solid var(--border-color-primaria);
+}
+
+/* Breakpoints 576px, 768px, 992px, 1200px e 1400px. */
+
+@media only screen and (max-width: 992px) {
+  .div_noticias_laterais {
+    padding-left: 0;
+    margin-top: 60px;
+  }
+
+  .noticias_laterais {
+    padding-left: 24px;
+  }
+}
