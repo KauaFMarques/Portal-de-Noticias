@@ -1,0 +1,23 @@
+.msg_container {
+  text-align: center;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.message_success p {
+  background-color: #22bb33;
+}
+
+.message_error p {
+  background-color: #bb2124;
+}
+
+.message_warning p {
+  background-color: #f0ad4e;
+}
+
+[class*="message_"] p {
+  border-radius: 5px;
+  padding: 10px;
+  color: #fff;
+}

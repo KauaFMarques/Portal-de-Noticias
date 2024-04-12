@@ -1,16 +1,14 @@
 import { useState } from "react";
-import Button from "../components/Button";
-import styles from "./SignUp.module.css";
-import { axiosLocalApi } from "../utils/axiosInstance";
 import HeaderSignInUp from "../components/HeaderSignInUp";
+import styles from "./SignIn.module.css";
+import Button from "../components/Button";
+import { axiosLocalApi } from "../utils/axiosInstance";
 import Message from "../components/Message";
 
-const SignUp = () => {
-  const [signUpValues, setSignUpValues] = useState({
+const SignIn = () => {
+  const [signInValues, setSignInValues] = useState({
     username: "",
-    email: "",
     password: "",
-    confirm_password: "",
   });
   const [requisicaoEmProgresso, setRequisicaoEmProgresso] = useState(false);
   const [messageConfig, setMessageConfig] = useState({
@@ -22,9 +20,8 @@ const SignUp = () => {
     e.preventDefault();
 
     setRequisicaoEmProgresso(true);
-
     axiosLocalApi
-      .post("/user/register", signUpValues)
+      .post("/user/login", signInValues)
       .then((resp) => {
         console.log(resp);
         setRequisicaoEmProgresso(false);
@@ -47,7 +44,7 @@ const SignUp = () => {
 
   return (
     <>
-      <HeaderSignInUp type="SignUp" />
+      <HeaderSignInUp type={"SignIn"} />
       <div className={styles.form_div}>
         <form className={styles.form_styled} onSubmit={handleSubmit}>
           <label>
@@ -55,21 +52,9 @@ const SignUp = () => {
             <input
               type="text"
               onChange={(e) =>
-                setSignUpValues((prev) => ({
+                setSignInValues((prev) => ({
                   ...prev,
                   username: e.target.value,
-                }))
-              }
-            />
-          </label>
-          <label>
-            <p>E-mail:</p>
-            <input
-              type="text"
-              onChange={(e) =>
-                setSignUpValues((prev) => ({
-                  ...prev,
-                  email: e.target.value,
                 }))
               }
             />
@@ -80,28 +65,17 @@ const SignUp = () => {
             <input
               type="password"
               onChange={(e) =>
-                setSignUpValues((prev) => ({
+                setSignInValues((prev) => ({
                   ...prev,
                   password: e.target.value,
                 }))
               }
             />
           </label>
-          <label>
-            <p>Confirmar Senha:</p>
-            <input
-              type="password"
-              onChange={(e) =>
-                setSignUpValues((prev) => ({
-                  ...prev,
-                  confirm_password: e.target.value,
-                }))
-              }
-            />
-          </label>
+
           <Button
             requisicaoEmProgresso={requisicaoEmProgresso}
-            msg={"Cadastrar"}
+            msg={"Logar"}
             style={{
               width: "80%",
               marginTop: "15px",
@@ -118,4 +92,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;

@@ -18,39 +18,41 @@ const Footer = () => {
 
   return (
     <>
-      {location.pathname !== "/register" && (
-        <div className={styles.container_footer}>
-          <div>
-            <h1>Portal de Notícias</h1>
-            <div className={styles.footer_team_credits}>
-              <div style={{ display: "flex" }}>
-                <span>Construção do Front-end:</span>
-                <p>Engels Antero</p>
-              </div>
+      {location.pathname !== "/register" &&
+        location.pathname !== "/login" &&
+        location.pathname !== "/register_site" && (
+          <div className={styles.container_footer}>
+            <div>
+              <h1>Portal de Notícias</h1>
+              <div className={styles.footer_team_credits}>
+                <div style={{ display: "flex" }}>
+                  <span>Construção do Front-end:</span>
+                  <p>Engels Antero</p>
+                </div>
 
-              <div style={{ display: "flex" }}>
-                <span>Construção do Back-end:</span>
-                <div>
-                  <p>Kauã Ferreira Marques</p>
-                  <p>João Vitor Lima Santos</p>
+                <div style={{ display: "flex" }}>
+                  <span>Construção do Back-end:</span>
+                  <div>
+                    <p>Kauã Ferreira Marques</p>
+                    <p>João Vitor Lima Santos</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div>
-            <h3>Categorias</h3>
-            <div style={{ display: "flex" }}>
-              {categorys.map((subarray, index) => (
-                <div key={index} style={{ marginRight: "20px" }}>
-                  {subarray.map((itemSubarray, indexSubarray) => (
-                    <p key={indexSubarray}>{itemSubarray}</p>
-                  ))}
-                </div>
-              ))}
+            <div>
+              <h3>Categorias</h3>
+              <div style={{ display: "flex" }}>
+                {categorys.map((subarray, index) => (
+                  <div key={index} style={{ marginRight: "20px" }}>
+                    {subarray.map((itemSubarray, indexSubarray) => (
+                      <p key={indexSubarray}>{itemSubarray}</p>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
     </>
   );
 };
