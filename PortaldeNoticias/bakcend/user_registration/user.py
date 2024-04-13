@@ -62,24 +62,44 @@ def login():
     username = data.get('username')
     password = data.get('password')
 
-    conn = connect_db()
-    cursor = conn.cursor()
+    print("Consultando banco de dados para o usuáio", username) #Print antes da execução da consulta para saber se está tudo certo
 
-    #Faz uma consulta no banco de dados para verificar se os dados de usuario fornecidos existem no 
-    # banco, esse resultado é armazenado na variavel user
-    cursor.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
-    user = cursor.fetchone()
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
 
-    conn.close()
+        #Faz uma consulta no banco de dados para verificar se os dados de usuario fornecidos existem no 
+        # banco, esse resultado é armazenado na variavel user
+        cursor.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
+        user = cursor.fetchone()
 
-    # Se o usuário existir no banco de dados, define a variável de sessão logged_in 
-    # como True e retorna uma resposta JSON indicando o sucesso do login. 
-    # Caso contrário, retorna um erro 
-    if user:
-        session['logged_in'] = True
-        return jsonify({'success': True, 'message': 'Login successful'})
-    else:
-        return jsonify({'error': 'Invalid username or password'}), 401
+        print("Consulta ao banco de dados concluída para o usuário", username, ", senha:", password)
+        
+
+        # Se o usuário existir no banco de dados, define a variável de sessão logged_in 
+        # como True e retorna uma resposta JSON indicando o sucesso do login. 
+        # Caso contrário, retorna um erro 
+        if user:
+            user_data = {
+                'username': user[1],
+                'email': user[2]
+            }
+            session['logged_in'] = True
+            return jsonify({'success': True, 'message': 'Login efetuado com sucesso!'})
+        else:
+            cursor.execute("SELECT * FROM users WHERE username=%", (username,))
+            existing_user = cursor.fetchone()
+            if existing_user:
+                return jsonify({'erros': 'Senha inválida!'})
+            else:
+                return jsonify({'error': 'Nome do usuário inválida!'}), 401
+    except Exception as e:
+        #Em caso de erro, retorna uma resposta de erro
+        return jsonify({'error': str(e)}), 500
+    finally:
+        #Certifica-se de fechar a conecxão, independentemente do resultado
+        if 'conn' in locals():
+            conn.close()
 
 # Rota para logout de usuario
 @user_bp.route('/logout', methods=['POST'])
