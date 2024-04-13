@@ -33,21 +33,27 @@ def register_user():
     if password != confirm_password:
         return jsonify({'error': 'As senhas inseridas não coincidem!'}), 400
 
-    conn = connect_db()
-    cursor = conn.cursor()
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
 
-    # Verifica se o nome e email do usuário já existem no banco de dados, se não retorna erro
-    cursor.execute("SELECT * FROM users WHERE username=%s OR email=%s", (username, email))
-    if cursor.fetchone() is not None:
-        return jsonify({'error': 'Nome de usuário ou email já existe!'}), 400
+        # Verifica se o nome e email do usuário já existem no banco de dados, se não retorna erro
+        cursor.execute("SELECT * FROM users WHERE username=%s OR email=%s", (username, email))
+        if cursor.fetchone() is not None:
+            return jsonify({'error': 'Nome de usuário ou email já existe!'}), 400
 
-    # Insere o novo usuário no banco de dados
-    cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
-                   (username, email, password))
-    conn.commit()
-    conn.close()
-
-    return jsonify({'success': True, 'message': 'Usuário cadastrado com sucesso!'}), 201
+        # Insere o novo usuário no banco de dados
+        cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
+                       (username, email, password))
+        conn.commit()
+    except Exception as e:
+        #Em caso de erro, retorna uma resposta com erro
+        return jsonify({'error': str(e)}), 500
+    finally:
+        #Certifique-se de fechar a conexão, independente do resultado
+        if 'conn' in locals():
+            conn.close()
+    return jsonify({'sucess': True, 'message': 'Usuário cadastrado com sucesso!'}), 201
 
 # Rota para login de usuario
 @user_bp.route('/login', methods=['POST'])
