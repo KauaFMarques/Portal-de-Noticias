@@ -22,8 +22,8 @@ def register_user():
     #Aqui verifica se todos os campos obrigatorios estão preenchidos, se não retorna o erro
     required_fields = ['username', 'email', 'password', 'confirm_password']
     for field in required_fields:
-        if field not in data:
-            return jsonify({'error': f'Missing {field}'}), 400
+        if field not in data or not data[field]:
+            return jsonify({'error': f'Campo {field} ausente ou vazio!'}), 400
 
     username = data['username']
     email = data['email']
@@ -31,7 +31,7 @@ def register_user():
     confirm_password = data['confirm_password']
     #Verifica se a senha fornecida e a confimação dela estão corretas, se não, retorna erro
     if password != confirm_password:
-        return jsonify({'error': 'Passwords do not match'}), 400
+        return jsonify({'error': 'As senhas inseridas não coincidem!'}), 400
 
     conn = connect_db()
     cursor = conn.cursor()
@@ -39,7 +39,7 @@ def register_user():
     # Verifica se o nome e email do usuário já existem no banco de dados, se não retorna erro
     cursor.execute("SELECT * FROM users WHERE username=%s OR email=%s", (username, email))
     if cursor.fetchone() is not None:
-        return jsonify({'error': 'Username or email already exists'}), 400
+        return jsonify({'error': 'Nome de usuário ou email já existe!'}), 400
 
     # Insere o novo usuário no banco de dados
     cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
@@ -47,7 +47,7 @@ def register_user():
     conn.commit()
     conn.close()
 
-    return jsonify({'success': True, 'message': 'User registered successfully'}), 201
+    return jsonify({'success': True, 'message': 'Usuário cadastrado com sucesso!'}), 201
 
 # Rota para login de usuario
 @user_bp.route('/login', methods=['POST'])
