@@ -22,8 +22,8 @@ def register_user():
     #Aqui verifica se todos os campos obrigatorios estão preenchidos, se não retorna o erro
     required_fields = ['username', 'email', 'password', 'confirm_password']
     for field in required_fields:
-        if field not in data:
-            return jsonify({'error': f'Missing {field}'}), 400
+        if field not in data or not data[field]:
+            return jsonify({'error': f'Campo {field} ausente ou vazio!'}), 400
 
     username = data['username']
     email = data['email']
@@ -31,23 +31,29 @@ def register_user():
     confirm_password = data['confirm_password']
     #Verifica se a senha fornecida e a confimação dela estão corretas, se não, retorna erro
     if password != confirm_password:
-        return jsonify({'error': 'Passwords do not match'}), 400
+        return jsonify({'error': 'As senhas inseridas não coincidem!'}), 400
 
-    conn = connect_db()
-    cursor = conn.cursor()
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
 
-    # Verifica se o nome e email do usuário já existem no banco de dados, se não retorna erro
-    cursor.execute("SELECT * FROM users WHERE username=%s OR email=%s", (username, email))
-    if cursor.fetchone() is not None:
-        return jsonify({'error': 'Username or email already exists'}), 400
+        # Verifica se o nome e email do usuário já existem no banco de dados, se não retorna erro
+        cursor.execute("SELECT * FROM users WHERE username=%s OR email=%s", (username, email))
+        if cursor.fetchone() is not None:
+            return jsonify({'error': 'Nome de usuário ou email já existe!'}), 400
 
-    # Insere o novo usuário no banco de dados
-    cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
-                   (username, email, password))
-    conn.commit()
-    conn.close()
-
-    return jsonify({'success': True, 'message': 'User registered successfully'}), 201
+        # Insere o novo usuário no banco de dados
+        cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
+                       (username, email, password))
+        conn.commit()
+    except Exception as e:
+        #Em caso de erro, retorna uma resposta com erro
+        return jsonify({'error': str(e)}), 500
+    finally:
+        #Certifique-se de fechar a conexão, independente do resultado
+        if 'conn' in locals():
+            conn.close()
+    return jsonify({'sucess': True, 'message': 'Usuário cadastrado com sucesso!'}), 201
 
 # Rota para login de usuario
 @user_bp.route('/login', methods=['POST'])
@@ -56,24 +62,44 @@ def login():
     username = data.get('username')
     password = data.get('password')
 
-    conn = connect_db()
-    cursor = conn.cursor()
+    print("Consultando banco de dados para o usuáio", username) #Print antes da execução da consulta para saber se está tudo certo
 
-    #Faz uma consulta no banco de dados para verificar se os dados de usuario fornecidos existem no 
-    # banco, esse resultado é armazenado na variavel user
-    cursor.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
-    user = cursor.fetchone()
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
 
-    conn.close()
+        #Faz uma consulta no banco de dados para verificar se os dados de usuario fornecidos existem no 
+        # banco, esse resultado é armazenado na variavel user
+        cursor.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
+        user = cursor.fetchone()
 
-    # Se o usuário existir no banco de dados, define a variável de sessão logged_in 
-    # como True e retorna uma resposta JSON indicando o sucesso do login. 
-    # Caso contrário, retorna um erro 
-    if user:
-        session['logged_in'] = True
-        return jsonify({'success': True, 'message': 'Login successful'})
-    else:
-        return jsonify({'error': 'Invalid username or password'}), 401
+        print("Consulta ao banco de dados concluída para o usuário", username, ", senha:", password)
+        
+
+        # Se o usuário existir no banco de dados, define a variável de sessão logged_in 
+        # como True e retorna uma resposta JSON indicando o sucesso do login. 
+        # Caso contrário, retorna um erro 
+        if user:
+            user_data = {
+                'username': user[1],
+                'email': user[2]
+            }
+            session['logged_in'] = True
+            return jsonify({'success': True, 'message': 'Login efetuado com sucesso!'})
+        else:
+            cursor.execute("SELECT * FROM users WHERE username=%", (username,))
+            existing_user = cursor.fetchone()
+            if existing_user:
+                return jsonify({'erros': 'Senha inválida!'})
+            else:
+                return jsonify({'error': 'Nome do usuário inválida!'}), 401
+    except Exception as e:
+        #Em caso de erro, retorna uma resposta de erro
+        return jsonify({'error': str(e)}), 500
+    finally:
+        #Certifica-se de fechar a conecxão, independentemente do resultado
+        if 'conn' in locals():
+            conn.close()
 
 # Rota para logout de usuario
 @user_bp.route('/logout', methods=['POST'])
