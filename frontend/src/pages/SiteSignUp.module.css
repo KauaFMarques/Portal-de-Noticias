@@ -37,7 +37,7 @@
   margin: 45px auto;
 }
 
-.form_container input {
+.form_register label > input {
   border: 1px solid var(--border-color-primaria);
 }
 
