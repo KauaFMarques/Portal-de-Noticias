@@ -6,10 +6,11 @@ noticias_bp = Blueprint('noticias', __name__)
 
 # Conexão com o banco de dados
 conn = psycopg2.connect(
-    dbname="portalNoticia",
+    dbname="portalDeNoticias",
     user="postgres",
-    password="06012002",
-    host="localhost"
+    password="mk875",
+    host="localhost",
+    port='5432'
 )
 cur = conn.cursor()
 

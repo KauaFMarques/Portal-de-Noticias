@@ -5,9 +5,10 @@ import psycopg2
 
 def connect_db():
     conn = psycopg2.connect(
-        dbname="portalNoticia",
+        dbname="portalDeNoticias",
         user="postgres",
-        password="06012002",
-        host="localhost"
+        password="mk875",
+        host="localhost",
+        port='5432'
     )
     return conn

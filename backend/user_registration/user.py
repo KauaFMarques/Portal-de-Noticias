@@ -1,16 +1,22 @@
 from flask import Flask, request, jsonify, Blueprint, session
-import psycopg2
+import psycopg2, jwt
+from functools import wraps
+import os,datetime
 
+
+# função feita por kauãpara testar os tokens
 #Cria um blueprint chamado 'user_bp' para organizar as rotas relacionadas ao módulo de usuários.
 user_bp = Blueprint('user_bp', __name__)
+
 
 # Função para conectar ao banco de dados PostgreSQL
 def connect_db():
     conn = psycopg2.connect(
-        dbname="portalNoticia",
+        dbname="portalDeNoticias",
         user="postgres",
-        password="06012002",
-        host="localhost"
+        password="mk875",
+        host="localhost",
+        port='5432'
     )
     return conn
 
@@ -29,7 +35,9 @@ def register_user():
     email = data['email']
     password = data['password']
     confirm_password = data['confirm_password']
-    #Verifica se a senha fornecida e a confimação dela estão corretas, se não, retorna erro
+    idade = data['idade']
+    cidade = data['cidade']
+
     if password != confirm_password:
         return jsonify({'error': 'As senhas inseridas não coincidem!'}), 400
 
@@ -43,14 +51,26 @@ def register_user():
             return jsonify({'error': 'Nome de usuário ou email já existe!'}), 400
 
         # Insere o novo usuário no banco de dados
-        cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
-                       (username, email, password))
+        cursor.execute("INSERT INTO users (username, email, password, idade, cidade) VALUES (%s, %s, %s, %s, %s) RETURNING *",
+                       (username, email, password, idade, cidade))
+        new_user = cursor.fetchone()
         conn.commit()
+
+        if new_user:
+            user_data = {
+                'id': new_user[0],
+                'username': new_user[1],
+                'email': new_user[2],
+                'idade': new_user[4],
+                'cidade': new_user[5]
+            }
+            return jsonify({'success': True, 'message': 'Usuário cadastrado com sucesso!', 'user': user_data}), 201
+        else:
+            return jsonify({'error': 'Erro ao obter dados do usuário após o cadastro!'}), 500
+
     except Exception as e:
-        #Em caso de erro, retorna uma resposta com erro
         return jsonify({'error': str(e)}), 500
     finally:
-        #Certifique-se de fechar a conexão, independente do resultado
         if 'conn' in locals():
             conn.close()
     return jsonify({'sucess': True, 'message': 'Usuário cadastrado com sucesso!'}), 201
