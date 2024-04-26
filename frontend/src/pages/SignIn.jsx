@@ -21,9 +21,9 @@ const SignIn = () => {
 
     setRequisicaoEmProgresso(true);
     axiosLocalApi
-      .post("/user/login", signInValues)
+      .post("/login", signInValues)
       .then((resp) => {
-        console.log(resp);
+        console.log(resp.data);
         setRequisicaoEmProgresso(false);
         setMessageConfig((prev) => ({
           ...prev,

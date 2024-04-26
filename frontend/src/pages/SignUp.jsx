@@ -24,7 +24,7 @@ const SignUp = () => {
     setRequisicaoEmProgresso(true);
 
     axiosLocalApi
-      .post("/user/register", signUpValues)
+      .post("/register", signUpValues)
       .then((resp) => {
         console.log(resp);
         setRequisicaoEmProgresso(false);
