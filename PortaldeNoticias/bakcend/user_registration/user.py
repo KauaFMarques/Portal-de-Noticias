@@ -82,10 +82,16 @@ def login():
         if user:
             user_data = {
                 'username': user[1],
-                'email': user[2]
+                'email': user[2],
+                'id' : user[0]
             }
             session['logged_in'] = True
-            return jsonify({'success': True, 'message': 'Login efetuado com sucesso!'})
+            response_data = {
+                'success' : True,
+                'message' : 'Login efetuado com sucesso!',
+                'user' : user_data
+            }
+            return jsonify(response_data)
         else:
             cursor.execute("SELECT * FROM users WHERE username=%", (username,))
             existing_user = cursor.fetchone()
