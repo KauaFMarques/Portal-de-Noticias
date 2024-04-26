@@ -4,7 +4,10 @@ import styles from "./HeaderSignInUp.module.css";
 const HeaderSignInUp = ({ type }) => {
   return (
     <div className={styles.header_signup}>
-      <h1>Portal de Notícias</h1>
+      <Link to={"/"}>
+        <h1>Portal de Notícias</h1>
+      </Link>
+
       <div>
         <div
           style={{

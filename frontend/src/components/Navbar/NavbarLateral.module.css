@@ -1,0 +1,26 @@
+.container_nav_lateral {
+  position: fixed;
+  width: 100px;
+  background-color: #fff;
+  width: 260px;
+  height: 100%;
+  top: 0;
+  z-index: 999;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  transition: margin-left 0.5s;
+}
+
+.arrow_back {
+  cursor: pointer;
+}
+
+.arrow_back svg {
+  position: absolute;
+  top: 50%;
+  left: 260px;
+  background-color: #fff;
+  padding: 15px 0px;
+  border-radius: 0px 10px 10px 0px;
+  transform: translateY(-50%);
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}

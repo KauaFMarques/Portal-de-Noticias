@@ -19,6 +19,7 @@
   position: absolute;
   align-items: center;
   right: 145px;
+  transition: all 0.2s;
 }
 
 .nav_links a {
@@ -43,6 +44,7 @@ h1 {
   width: 16%;
   position: absolute;
   left: 145px;
+  transition: all 0.2s;
 }
 
 .search_div input.input_search {
@@ -88,4 +90,51 @@ ul li a {
 
 .sublinks_navbar ul li {
   margin-right: 10px;
+}
+
+.menu_hamburguer {
+  cursor: pointer;
+}
+
+.menu_hamburguer svg {
+  position: absolute;
+  transform: translateY(-50%);
+  left: 20px;
+  transition: all 0.2s;
+}
+
+@media only screen and (max-width: 1200px) {
+  .search_div {
+    width: 20%;
+    left: 10px;
+  }
+
+  .nav_links {
+    right: 10px;
+  }
+}
+
+@media only screen and (max-width: 990px) {
+  .search_div {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .nav_links {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media only screen and (min-width: 990px) {
+  .menu_hamburguer svg {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .sublinks_navbar {
+    display: none;
+  }
 }

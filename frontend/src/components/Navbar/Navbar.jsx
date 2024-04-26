@@ -1,10 +1,13 @@
 import styles from "./Navbar.module.css";
 import { Icon } from "@iconify/react";
 import { Link, useLocation } from "react-router-dom";
-import Button from "./Button";
+import Button from "../Button";
+import NavbarLateral from "./NavbarLateral";
+import { useState } from "react";
 
 const Navbar = () => {
   const location = useLocation();
+  const [menuLateralAberto, setMenuLateralAberto] = useState(false);
 
   return (
     <>
@@ -12,8 +15,22 @@ const Navbar = () => {
         location.pathname !== "/login" &&
         location.pathname !== "/register_site" && (
           <>
+            <NavbarLateral
+              menuLateralAberto={menuLateralAberto}
+              setMenuLateralAberto={setMenuLateralAberto}
+            />
             <div className={styles.navbar_fixed_div}>
               <div className={styles.navbar}>
+                <div
+                  className={styles.menu_hamburguer}
+                  onClick={() => setMenuLateralAberto(true)}
+                >
+                  <Icon
+                    width={40}
+                    icon="ic:round-menu"
+                    style={{ color: "#cacaca" }}
+                  />
+                </div>
                 <div className={styles.search_div}>
                   <Icon
                     icon="mi:search"

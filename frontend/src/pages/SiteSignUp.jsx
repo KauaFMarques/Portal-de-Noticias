@@ -31,7 +31,7 @@ const SiteSignUp = () => {
         </div>
         <div className={`col-6 ${styles.div_direita}`}>
           <div className={styles.infos_box}>
-            <h2>Amplie o Alcance de seu Site de Notícias</h2>
+            <h2>Amplie o Alcance das suas Notícias</h2>
             <p>
               Nosso serviço oferece uma solução prática e eficaz para sites de
               notícias que desejam ampliar seu alcance e visibilidade. Ao
