@@ -15,7 +15,7 @@ cur = conn.cursor()
 
 
 # Rota para listar todas as notícias de um site específico
-@noticias_bp.route('/sites/<int:site_id>/noticias', methods=['GET'])
+@noticias_bp.route('/sites/<int:site_id>', methods=['GET'])
 def get_site_noticias(site_id):
     print("Debug: Entrando na rota /sites/<int:site_id>/noticias")
     cur.execute("SELECT * FROM Sites_noticias WHERE site_id = %s", (site_id,))
@@ -25,7 +25,7 @@ def get_site_noticias(site_id):
 
 
 # Rota para listar todas as notícias de uma categoria específica
-@noticias_bp.route('/categorias/<int:categoria_id>/noticias', methods=['GET'])
+@noticias_bp.route('/categorias/<int:categoria_id>', methods=['GET'])
 def get_categoria_noticias(categoria_id):
     print("Debug: Entrando na rota /categorias/<int:categoria_id>/noticias")
     cur.execute(
