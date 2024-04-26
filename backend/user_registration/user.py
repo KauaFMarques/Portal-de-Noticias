@@ -4,7 +4,7 @@ from functools import wraps
 import os,datetime
 
 
-# função feita por kauãpara testar os tokens
+
 #Cria um blueprint chamado 'user_bp' para organizar as rotas relacionadas ao módulo de usuários.
 user_bp = Blueprint('user_bp', __name__)
 
