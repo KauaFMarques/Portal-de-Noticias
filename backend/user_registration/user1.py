@@ -3,15 +3,9 @@ import psycopg2, jwt
 from functools import wraps
 import os,datetime
 
-
-# função feita por kauãpara testar os tokens
 #Cria um blueprint chamado 'user_bp' para organizar as rotas relacionadas ao módulo de usuários.
 user_bp = Blueprint('user_bp', __name__)
 
-@user_bp.route('/',methods=['GET'])
-def teste():
-    print("Hello world")
-    return "hello"
 
 # Função para conectar ao banco de dados PostgreSQL
 def connect_db():
@@ -39,9 +33,7 @@ def register_user():
     email = data['email']
     password = data['password']
     confirm_password = data['confirm_password']
-    #idade = data['idade']
-    #cidade = data['cidade']
-
+    #Verifica se a senha fornecida e a confimação dela estão corretas, se não, retorna erro
     if password != confirm_password:
         return jsonify({'error': 'As senhas inseridas não coincidem!'}), 400
 
@@ -55,27 +47,17 @@ def register_user():
             return jsonify({'error': 'Nome de usuário ou email já existe!'}), 400
 
         # Insere o novo usuário no banco de dados
-        cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s) RETURNING *",
+        cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
                        (username, email, password))
-        new_user = cursor.fetchone()
         conn.commit()
-
-        if new_user:
-            user_data = {
-                'id': new_user[0],
-                'username': new_user[1],
-                'email': new_user[2]
-            }
-            
-        else:
-            return jsonify({'error': 'Erro ao obter dados do usuário após o cadastro!'}), 500
-
     except Exception as e:
+        #Em caso de erro, retorna uma resposta com erro
         return jsonify({'error': str(e)}), 500
     finally:
+        #Certifique-se de fechar a conexão, independente do resultado
         if 'conn' in locals():
             conn.close()
-            return jsonify({'sucess': True, 'message': 'Usuário cadastrado com sucesso!'}), 201
+    return jsonify({'sucess': True, 'message': 'Usuário cadastrado com sucesso!'}), 201
 
 # Rota para login de usuario
 @user_bp.route('/login', methods=['POST'])
@@ -140,5 +122,3 @@ def profile():
         return jsonify({'success': True, 'message': 'User profile retrieved'})
     else:
         return jsonify({'error': 'Unauthorized access'}), 401
-    
-
