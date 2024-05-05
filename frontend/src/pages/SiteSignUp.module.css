@@ -1,0 +1,65 @@
+.div_direita {
+  background-image: url("https://img.freepik.com/fotos-gratis/vista-superior-velhas-pecas-de-jornal-frances_23-2149318857.jpg?w=996&t=st=1712873755~exp=1712874355~hmac=b78a4287e73e7e2383da0bfb24c41a05e27a62884474223bcf100d0eb7c27757");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.infos_box {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(3px);
+  border-radius: 5px;
+  font-family: "Times New Roman", Times, serif;
+  max-width: 550px;
+  padding: 20px 30px;
+}
+
+.infos_box p {
+  margin-top: 10px;
+}
+
+.infos_box span {
+  font-weight: bold;
+}
+
+.infos_box h2 {
+  border-bottom: 1px solid var(--border-color-primaria);
+  padding: 10px 0px;
+  padding-top: 0px;
+}
+
+.div_esquerda {
+  padding: 27px 30px;
+}
+
+.form_container {
+  max-width: 395px;
+  margin: 45px auto;
+}
+
+.form_container input {
+  border: 1px solid var(--border-color-primaria);
+}
+
+.form_container h2,
+.form_container h4 {
+  font-family: "Times New Roman", Times, serif;
+  margin-bottom: 10px;
+}
+
+.form_container h4 {
+  color: var(--text-color-ul-link);
+  font-size: 1.1em;
+}
+
+.form_register {
+  border: 1px solid var(--border-color-primaria);
+  border-radius: 5px;
+  padding: 20px;
+}
+
+@media only screen and (max-width: 992px) {
+  .div_direita {
+    display: none;
+  }
+}

@@ -1,0 +1,27 @@
+.container_footer {
+  max-width: 1230px;
+  margin: 0 auto;
+  border-top: 1px solid var(--border-color-primaria);
+  height: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.container_footer p {
+  color: #95928d;
+}
+
+.footer_team_credits {
+  margin-left: 14px;
+  margin-top: 10px;
+}
+
+.footer_team_credits span {
+  margin-right: 6px;
+}
+
+.footer_team_credits > div {
+  margin-bottom: 8px;
+}

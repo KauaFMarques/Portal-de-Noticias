@@ -1,0 +1,29 @@
+.header_signup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+}
+
+.header_signup button {
+  margin-left: 15px;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 17px 7px 17px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.header_signup span {
+  color: var(--text-color-ul-link);
+}
+
+.header_signup button:hover {
+  background-color: #e0e0e0;
+}
+
+.link_join_us {
+  color: #0787ca;
+  text-decoration: underline;
+  font-weight: bold;
+}
