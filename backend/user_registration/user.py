@@ -1,12 +1,12 @@
 from flask import Flask, request, jsonify, Blueprint, session
 import psycopg2, jwt
 from functools import wraps
-import os,datetime
-
-
+import time
+import bcrypt
 
 #Cria um blueprint chamado 'user_bp' para organizar as rotas relacionadas ao módulo de usuários.
 user_bp = Blueprint('user_bp', __name__)
+
 
 @user_bp.route('/',methods=['GET'])
 def teste():
@@ -24,6 +24,46 @@ def connect_db():
     )
     return conn
 
+
+# Carregar a chave pública
+try:
+    with open('public_key.pem', 'r') as f:
+        public_key = f.read()
+except FileNotFoundError:
+    print("Arquivo public_key.pem não encontrado.")
+except Exception as e:
+    print("Erro ao ler o arquivo public_key.pem:", e)
+
+
+#função para criar token
+def generate_token(username, email, private_key, expiration_time=20):
+    payload_data ={
+        'username': username,
+        'email': email,
+        'exp': int(time.time()) + expiration_time
+    }
+    token = jwt.encode(
+        payload=payload_data,
+        key=private_key,
+        algorithm='RS256',
+    )
+    return token
+
+
+# Carregar a chave privada
+with open('private_key.pem', 'r') as f:
+    private_key = f.read()
+def generate_token(payload_data):
+    # Gerar o token JWT assinado com a chave privada
+    token = jwt.encode(
+        payload=payload_data,
+        key=private_key,
+        algorithm='RS256',
+    )
+    
+    return token
+    
+
 # Rota para cadastro de usuário
 @user_bp.route('/register', methods=['POST'])
 def register_user():
@@ -39,8 +79,6 @@ def register_user():
     email = data['email']
     password = data['password']
     confirm_password = data['confirm_password']
-    #idade = data['idade']
-    #cidade = data['cidade']
 
     if password != confirm_password:
         return jsonify({'error': 'As senhas inseridas não coincidem!'}), 400
@@ -54,21 +92,29 @@ def register_user():
         if cursor.fetchone() is not None:
             return jsonify({'error': 'Nome de usuário ou email já existe!'}), 400
 
+
+        #criptografia antes de inserção no banco de dados
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt())
+        
+        #criação do token
+        token=generate_token(data)
         # Insere o novo usuário no banco de dados
-        cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s) RETURNING *",
-                       (username, email, password))
+        cursor.execute("INSERT INTO users (username, email, password, token) VALUES (%s, %s, %s, %s) RETURNING *",
+                       (username, email, hashed_password.decode('utf-8'), token))
+        
         new_user = cursor.fetchone()
         conn.commit()
 
-        if new_user:
+        """if new_user:
             user_data = {
                 'id': new_user[0],
                 'username': new_user[1],
-                'email': new_user[2]
+                'email': new_user[2],
+                'token': new_user[3]
             }
             
         else:
-            return jsonify({'error': 'Erro ao obter dados do usuário após o cadastro!'}), 500
+            return jsonify({'error': 'Erro ao obter dados do usuário após o cadastro!'}), 500"""
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -77,57 +123,67 @@ def register_user():
             conn.close()
     return jsonify({'sucess': True, 'message': 'Usuário cadastrado com sucesso!'}), 201
 
-# Rota para login de usuario
+
+# Rota para login de usuário
 @user_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
 
-    print("Consultando banco de dados para o usuáio", username) #Print antes da execução da consulta para saber se está tudo certo
-
     try:
         conn = connect_db()
         cursor = conn.cursor()
 
-        #Faz uma consulta no banco de dados para verificar se os dados de usuario fornecidos existem no 
-        # banco, esse resultado é armazenado na variavel user
-        cursor.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
+        # Faz uma consulta no banco de dados para verificar se os dados de usuário fornecidos existem no 
+        # banco, esse resultado é armazenado na variável user
+        cursor.execute("SELECT * FROM users WHERE username=%s", (username,))
         user = cursor.fetchone()
 
-        print("Consulta ao banco de dados concluída para o usuário", username, ", senha:", password)
-        
-
-        # Se o usuário existir no banco de dados, define a variável de sessão logged_in 
-        # como True e retorna uma resposta JSON indicando o sucesso do login. 
-        # Caso contrário, retorna um erro 
+        # Se o usuário existir no banco de dados, verifica se a senha fornecida corresponde à senha armazenada
         if user:
-            user_data = {
-                'username': user[1],
-                'email': user[2],
-                'id': user[0]
-            }
-            session['logged_in'] = True
-            respose_data = {
-                'success' : True,
-                'message' : 'Login efetuado com sucesso!',
-                'user' : user_data
-            }
-            return jsonify(respose_data)
-        else:
-            cursor.execute("SELECT * FROM users WHERE username=%", (username,))
-            existing_user = cursor.fetchone()
-            if existing_user:
-                return jsonify({'erros': 'Senha inválida!'})
+            hashed_password = user[3]  # Senha criptografada armazenada no banco de dados
+            huj=hashed_password
+            #print("huj:", huj)
+            
+            """print("Hashed Password decodificado):", hashed_password.encode())
+            print("senha do usuario:", password)
+            print("tipo de dados:")
+            print(type(password.encode()))
+            print(type(hashed_password.encode()))"""
+            """print("------")
+            hash = bytes.fromhex(hashed_password)
+            print(hash) # $2b$12$GBx96IiULJ9Ja3BfSfFwseai8To20fr.xqdhHRv6qegu7hzCYeByu
+            verified = bcrypt.checkpw('senha7894'.encode('utf-8'), hash)
+            print(verified) # True"""
+            #print((bytes.fromhex(hashed_password).decode))
+            if bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8')):
+                user_data = {
+                    'token':user[4],
+                    'username': user[1],
+                    'email': user[2],
+                    'id': user[0]
+                }
+                session['logged_in'] = True
+                response_data = {
+                    'success': True,
+                    'message': 'Login efetuado com sucesso!',
+                    'user': user_data
+                }
+                return jsonify(response_data)
             else:
-                return jsonify({'error': 'Nome do usuário inválida!'}), 401
+                return jsonify({'error': 'Senha inválida!'}), 401
+        else:
+            return jsonify({'error': 'Nome de usuário inválido!'}), 401
     except Exception as e:
-        #Em caso de erro, retorna uma resposta de erro
+        # Em caso de erro, retorna uma resposta de erro
         return jsonify({'error': str(e)}), 500
     finally:
-        #Certifica-se de fechar a conecxão, independentemente do resultado
+        # Certifica-se de fechar a conexão, independentemente do resultado
         if 'conn' in locals():
             conn.close()
+
+
 
 # Rota para logout de usuario
 @user_bp.route('/logout', methods=['POST'])

@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from noticias import noticias_bp
-from user1 import *
+from user import *
 
 app = Flask(__name__)
 cors = CORS(app)
