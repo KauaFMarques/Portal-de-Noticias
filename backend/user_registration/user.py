@@ -76,55 +76,58 @@ def register_user():
             conn.close()
     return jsonify({'sucess': True, 'message': 'Usuário cadastrado com sucesso!'}), 201
 
-# Rota para login de usuario
+
 @user_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
 
-    print("Consultando banco de dados para o usuáio", username) #Print antes da execução da consulta para saber se está tudo certo
+    print("Consultando banco de dados para o usuário:",
+          username)  # Print antes da execução da consulta
 
     try:
         conn = connect_db()
         cursor = conn.cursor()
 
-        #Faz uma consulta no banco de dados para verificar se os dados de usuario fornecidos existem no 
-        # banco, esse resultado é armazenado na variavel user
-        cursor.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
+        # Faz uma consulta no banco de dados para verificar se os dados de usuário fornecidos existem no
+        # banco, esse resultado é armazenado na variável user
+        cursor.execute(
+            "SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
         user = cursor.fetchone()
 
-        print("Consulta ao banco de dados concluída para o usuário", username, ", senha:", password)
-        
+        print("Consulta ao banco de dados concluída para o usuário:",
+              username, ", senha:", password)  # Print após a execução da consulta
 
-        # Se o usuário existir no banco de dados, define a variável de sessão logged_in 
-        # como True e retorna uma resposta JSON indicando o sucesso do login. 
-        # Caso contrário, retorna um erro 
+        # Se o usuário existir no banco de dados, define a variável de sessão logged_in
+        # como True e retorna uma resposta JSON indicando o sucesso do login.
+        # Caso contrário, retorna um erro
         if user:
             user_data = {
                 'username': user[1],
                 'email': user[2],
-                'id' : user[0]
+                'id': user[0]
             }
             session['logged_in'] = True
-            response_data = {
-                'success' : True,
-                'message' : 'Login efetuado com sucesso!',
-                'user' : user_data
+            respose_data = {
+                'success': True,
+                'message': 'Login efetuado com sucesso!',
+                'user': user_data
             }
-            return jsonify(response_data)
+            return jsonify(respose_data)
         else:
-            cursor.execute("SELECT * FROM users WHERE username=%", (username,))
+            cursor.execute(
+                "SELECT * FROM users WHERE username=%s", (username,))
             existing_user = cursor.fetchone()
             if existing_user:
-                return jsonify({'erros': 'Senha inválida!'})
+                return jsonify({'error': 'Senha inválida!'}), 401
             else:
-                return jsonify({'error': 'Nome do usuário inválida!'}), 401
+                return jsonify({'error': 'Nome de usuário inválido!'}), 401
     except Exception as e:
-        #Em caso de erro, retorna uma resposta de erro
-        return jsonify({'error': str(e)}), 500
+        # Em caso de erro, retorna uma resposta com o erro
+        return jsonify({'error': 'Erro ao efetuar login!'}), 500
     finally:
-        #Certifica-se de fechar a conecxão, independentemente do resultado
+        # Certifique-se de fechar a conexão, independentemente do resultado
         if 'conn' in locals():
             conn.close()
 
