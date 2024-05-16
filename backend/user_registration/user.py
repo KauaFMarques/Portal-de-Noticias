@@ -18,7 +18,7 @@ def connect_db():
     conn = psycopg2.connect(
         dbname="portalDeNoticias",
         user="postgres",
-        password="mk875",
+        password="mk785",
         host="localhost",
         port='5432'
     )
@@ -36,7 +36,7 @@ except Exception as e:
 
 
 #função para criar token
-def generate_token(username, email, private_key, expiration_time=20):
+def generate_token(username, email, private_key, expiration_time):
     payload_data ={
         'username': username,
         'email': email,
@@ -202,5 +202,43 @@ def profile():
         return jsonify({'success': True, 'message': 'User profile retrieved'})
     else:
         return jsonify({'error': 'Unauthorized access'}), 401
-    
 
+
+    
+# Rota para cadastrar/importar notícias
+@user_bp.route('/cadastrarnoticia', methods=['POST'])
+def cadastrar_noticia():
+    # Verifica se o usuário está autenticado
+    if not session.get('logged_in'):
+        return jsonify({'error': 'Usuário não autenticado'}), 401
+
+    # Extrai os dados JSON da solicitação HTTP
+    data = request.get_json()
+
+    # Verifica se todos os campos obrigatórios estão presentes nos dados da solicitação
+    required_fields = ['titulo', 'foto', 'resumo', 'noticia', 'site_id', 'categoria_id']
+    for field in required_fields:
+        if field not in data or not data[field]:
+            return jsonify({'error': f'Campo {field} ausente ou vazio!'}), 400
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+
+        # Insere a nova notícia no banco de dados
+        cursor.execute("INSERT INTO Sites_noticias (titulo, foto, resumo, noticia, site_id, categoria_id) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *",
+                       (data['titulo'], data['foto'], data['resumo'], data['noticia'], data['site_id'], data['categoria_id']))
+        
+        new_noticia = cursor.fetchone()
+        conn.commit()
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'conn' in locals():
+            conn.close()
+
+    return jsonify({'success': True, 'message': 'Notícia cadastrada com sucesso!', 'noticia': new_noticia}), 201
+
+
+#rota para importar noticia
