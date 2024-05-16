@@ -69,6 +69,7 @@ def generate_token(payload_data):
 def register_user():
     #Extrai os dados json da solicitação HTTp usando o método get_json() do objeto request
     data = request.get_json()
+    
     #Aqui verifica se todos os campos obrigatorios estão preenchidos, se não retorna o erro
     required_fields = ['username', 'email', 'password', 'confirm_password']
     for field in required_fields:
@@ -79,6 +80,8 @@ def register_user():
     email = data['email']
     password = data['password']
     confirm_password = data['confirm_password']
+    if("site" in data):
+        site=data['site']
 
     if password != confirm_password:
         return jsonify({'error': 'As senhas inseridas não coincidem!'}), 400
@@ -98,9 +101,16 @@ def register_user():
         
         #criação do token
         token=generate_token(data)
-        # Insere o novo usuário no banco de dados
-        cursor.execute("INSERT INTO users (username, email, password, token) VALUES (%s, %s, %s, %s) RETURNING *",
-                       (username, email, hashed_password.decode('utf-8'), token))
+
+        if("site" in data):
+            # Insere o novo usuário no banco de dados
+            cursor.execute("INSERT INTO users (username, email, password, token, site) VALUES (%s, %s, %s, %s, %s) RETURNING *",
+                        (username, email, hashed_password.decode('utf-8'), token, site))
+            
+        else:
+            # Insere o novo usuário no banco de dados
+            cursor.execute("INSERT INTO users (username, email, password, token) VALUES (%s, %s, %s, %s) RETURNING *",
+                        (username, email, hashed_password.decode('utf-8'), token))
         
         new_user = cursor.fetchone()
         conn.commit()

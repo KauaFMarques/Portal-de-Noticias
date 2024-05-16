@@ -46,21 +46,25 @@ class TestApp(unittest.TestCase):
     def test_register_user(self):
         # Dados de exemplo para o teste
         user_data = {
-            'username': 'test_user1',
-            'email': 'test1@example.com',
+            'username': 'vind',
+            'email': 'vind@example.com',
             'password': 'password',
             'confirm_password': 'password'
         }
         response = self.app.post('/register', json=user_data)
         self.assertEqual(response.status_code, 201)
-        # Você pode adicionar mais verificações aqui, como verificar se o usuário foi realmente inserido no banco de dados
+
+        # Verifica se o usuário foi inserido corretamente no banco de dados
+        user = user_data.query.filter_by(username='vind').first()
+        self.assertIsNotNone(user)
+        self.assertEqual(user.email, 'vind@example.com')
 
     # Teste para a rota de login de usuário
     def test_login(self):
         # Dados de exemplo para o teste
         login_data = {
-            'username': 'test_user',
-            'password': 'password'
+            'username': 'vind',
+            'password': 'password1'
         }
         response = self.app.post('/login', json=login_data)
         self.assertEqual(response.status_code, 200)
