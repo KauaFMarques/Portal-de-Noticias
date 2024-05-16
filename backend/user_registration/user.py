@@ -83,6 +83,22 @@ def register_user():
     if("site" in data):
         site=data['site']
 
+    # Verificar se o endereço de e-mail tem o domínio "@gmail.com"
+    if not data['email'].endswith('@gmail.com'):
+        return jsonify({'error': 'O endereço de e-mail deve ser do domínio "@gmail.com"'}), 400
+
+    # Verifica se antes do "@gmai.com" há pelo menos quatro caracteres
+    if len(data['email'].split('@')[0]) < 4:
+        return jsonify({'error': 'O nome de usuário no e-mail deve ter pelo menos 4 caracteres antes do "@"'}), 400
+
+    # Valida a força da senha (exemplo básico)
+    if len(data['password']) < 8:
+        return jsonify({'error': 'A senha deve ter pelo menos oito caracteres'}), 400
+
+    # Valida se o campo "name" tem pelo menos dois caracteres
+    if len(data['username']) < 2:
+        return jsonify({'error': 'O nome deve ter pelo menos dois caracteres'}), 400
+
     if password != confirm_password:
         return jsonify({'error': 'As senhas inseridas não coincidem!'}), 400
 
@@ -141,6 +157,8 @@ def login():
     username = data.get('username')
     password = data.get('password')
 
+    print("Consultando banco de dados para o usuário:",username)  # Print antes da execução da consulta
+
     try:
         conn = connect_db()
         cursor = conn.cursor()
@@ -153,7 +171,7 @@ def login():
         # Se o usuário existir no banco de dados, verifica se a senha fornecida corresponde à senha armazenada
         if user:
             hashed_password = user[3]  # Senha criptografada armazenada no banco de dados
-            huj=hashed_password
+            #huj=hashed_password
             #print("huj:", huj)
             
             """print("Hashed Password decodificado):", hashed_password.encode())
@@ -182,9 +200,13 @@ def login():
                 }
                 return jsonify(response_data)
             else:
+                cursor.execute(
+                "SELECT * FROM users WHERE username=%s", (username,))
+            existing_user = cursor.fetchone()
+            if existing_user:
                 return jsonify({'error': 'Senha inválida!'}), 401
-        else:
-            return jsonify({'error': 'Nome de usuário inválido!'}), 401
+            else:
+                return jsonify({'error': 'Nome de usuário inválido!'}), 401
     except Exception as e:
         # Em caso de erro, retorna uma resposta de erro
         return jsonify({'error': str(e)}), 500
@@ -249,6 +271,3 @@ def cadastrar_noticia():
             conn.close()
 
     return jsonify({'success': True, 'message': 'Notícia cadastrada com sucesso!', 'noticia': new_noticia}), 201
-
-
-#rota para importar noticia
