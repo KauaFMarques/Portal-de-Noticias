@@ -29,6 +29,27 @@ def register_user():
     email = data['email']
     password = data['password']
     confirm_password = data['confirm_password']
+
+    # Verificar se o endereço de e-mail tem o domínio "@gmail.com"
+    if not data['email'].endswith('@gmail.com'):
+        return jsonify({'error': 'O endereço de e-mail deve ser do domínio "@gmail.com"'}), 400
+
+    # Verifica se antes do "@gmai.com" há pelo menos quatro caracteres
+    if len(data['email'].split('@')[0]) < 4:
+        return jsonify({'error': 'O nome de usuário no e-mail deve ter pelo menos 4 caracteres antes do "@"'}), 400
+
+    # Valida a força da senha (exemplo básico)
+    if len(data['password']) < 8:
+        return jsonify({'error': 'A senha deve ter pelo menos oito caracteres'}), 400
+
+    # Valida se o campo "name" tem pelo menos dois caracteres
+    if len(data['username']) < 4:
+        return jsonify({'error': 'O nome deve ter pelo menos dois caracteres'}), 400
+
+    # Verifica se a senha fornecida e a confirmação dela estão corretas, se não, retorna erro
+    if password != confirm_password:
+        return jsonify({'error': 'As senhas inseridas não coincidem'}), 400
+
     #Verifica se a senha fornecida e a confimação dela estão corretas, se não, retorna erro
     if password != confirm_password:
         return jsonify({'error': 'As senhas inseridas não coincidem!'}), 400
