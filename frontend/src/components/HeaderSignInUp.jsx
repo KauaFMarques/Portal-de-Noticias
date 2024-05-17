@@ -39,7 +39,7 @@ const HeaderSignInUp = ({ type }) => {
         {type === "SignUp" && (
           <div style={{ marginTop: "10px" }}>
             <p style={{ color: "#55534f" }}>
-              É propriétario de um site de notícias?{" "}
+              Deseja publicar suas noticías no nosso site?{" "}
               <Link className={styles.link_join_us} to={"/register_site"}>
                 junte-se a nós
               </Link>

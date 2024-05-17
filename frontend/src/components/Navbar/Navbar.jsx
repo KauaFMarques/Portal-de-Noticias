@@ -3,11 +3,35 @@ import { Icon } from "@iconify/react";
 import { Link, useLocation } from "react-router-dom";
 import Button from "../Button";
 import NavbarLateral from "./NavbarLateral";
-import { useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { UserContext } from "../../contexts/UserContext";
 
 const Navbar = () => {
   const location = useLocation();
+  const { user, setUser } = useContext(UserContext);
   const [menuLateralAberto, setMenuLateralAberto] = useState(false);
+  const [subMenuUserAberto, setSubMenuUserAberto] = useState(false);
+  const divSubMenu = useRef(null);
+  const iconUserProfileNavRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickForaDoSubMenu = (event) => {
+      if (
+        divSubMenu.current &&
+        iconUserProfileNavRef.current &&
+        !divSubMenu.current.contains(event.target) &&
+        iconUserProfileNavRef.current.contains(event.target)
+      ) {
+        console.log(divSubMenu.current.contains(event.target));
+        setSubMenuUserAberto(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickForaDoSubMenu);
+
+    return () =>
+      document.removeEventListener("mousedown", handleClickForaDoSubMenu);
+  }, []);
 
   return (
     <>
@@ -42,17 +66,67 @@ const Navbar = () => {
                 <Link to={"/"}>
                   <h1>Portal de Notícias</h1>
                 </Link>
-
-                <div className={styles.nav_links}>
-                  <Link to={"/about"}>Sobre</Link>
-                  <Link to={"/login"}>Logar</Link>
-                  <Link to={"/register"} className="link_button">
-                    <Button
-                      style={{ marginLeft: "10px" }}
-                      msg={"Cadastre-se"}
+                {/* <button onClick={() => console.log(user)}>click</button> */}
+                {user.username && (
+                  <div className={styles.user_nav}>
+                    <p>
+                      Olá, <span>{user.username}</span>
+                    </p>
+                    <Icon
+                      icon="ei:user"
+                      height={60}
+                      style={{ color: "#d0d0d0", cursor: "pointer" }}
+                      onClick={() => setSubMenuUserAberto((prev) => !prev)}
                     />
-                  </Link>
-                </div>
+                    {subMenuUserAberto && (
+                      <div ref={divSubMenu} className={styles.user_submenu}>
+                        <Link>
+                          <Icon
+                            ref={iconUserProfileNavRef}
+                            icon="subway:mark-2"
+                            height={20}
+                            style={{ color: "#000" }}
+                          />
+                          <p>Notícias Salvas</p>
+                        </Link>
+                        <Link>
+                          <Icon
+                            icon="icon-park-solid:like"
+                            height={20}
+                            style={{ color: "#000" }}
+                          />
+                          <p>Notícias Curtidas</p>
+                        </Link>
+                        <button
+                          onClick={() => {
+                            localStorage.removeItem("token");
+                            setUser(null);
+                          }}
+                        >
+                          <Icon
+                            icon="material-symbols:logout"
+                            height={22}
+                            style={{ color: "#000" }}
+                          />
+                          <p>Log Out</p>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {!user.username && (
+                  <div className={styles.nav_links}>
+                    <Link to={"/about"}>Sobre</Link>
+                    <Link to={"/login"}>Logar</Link>
+                    <Link to={"/register"} className="link_button">
+                      <Button
+                        style={{ marginLeft: "10px" }}
+                        msg={"Cadastre-se"}
+                      />
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
 
