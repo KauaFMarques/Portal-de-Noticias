@@ -1,8 +1,30 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./SiteSignUp.module.css";
 import Button from "../components/Button";
+import { axiosLocalApi } from "../utils/axiosInstance";
+import { useState } from "react";
 
 const SiteSignUp = () => {
+  const [valuesCadastro, setValuesCadastro] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirm_password: "",
+  });
+  const navigate = useNavigate();
+
+  const handleCadastro = () => {
+    axiosLocalApi
+      .post("/registerjournalist", valuesCadastro)
+      .then((resp) => {
+        console.log(resp.data);
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <>
       <div className="flex_row" style={{ minHeight: "100vh" }}>
@@ -20,24 +42,58 @@ const SiteSignUp = () => {
             <div className={styles.form_register}>
               <label>
                 <h4>Seu Nome:</h4>
-                <input placeholder="Digite o seu nome" type="text" />
+                <input
+                  placeholder="Digite o seu nome"
+                  type="text"
+                  onChange={(e) =>
+                    setValuesCadastro((prev) => ({
+                      ...prev,
+                      username: e.target.value,
+                    }))
+                  }
+                />
               </label>
               <label>
                 <h4>E-mail:</h4>
-                <input placeholder="Digite o seu e-mail" type="text" />
+                <input
+                  placeholder="Digite o seu e-mail"
+                  type="text"
+                  onChange={(e) =>
+                    setValuesCadastro((prev) => ({
+                      ...prev,
+                      email: e.target.value,
+                    }))
+                  }
+                />
               </label>
               <label>
                 <h4>Senha:</h4>
-                <input placeholder="Digite a sua senha" type="password" />
+                <input
+                  placeholder="Digite a sua senha"
+                  type="password"
+                  onChange={(e) =>
+                    setValuesCadastro((prev) => ({
+                      ...prev,
+                      password: e.target.value,
+                    }))
+                  }
+                />
               </label>
               <label>
                 <h4>Confirmar Senha:</h4>
                 <input
                   placeholder="Digite novamente a sua senha"
                   type="password"
+                  onChange={(e) =>
+                    setValuesCadastro((prev) => ({
+                      ...prev,
+                      confirm_password: e.target.value,
+                    }))
+                  }
                 />
               </label>
               <Button
+                onClick={handleCadastro}
                 msg={"Cadastrar"}
                 style={{ marginTop: "14px", width: "100%" }}
               />

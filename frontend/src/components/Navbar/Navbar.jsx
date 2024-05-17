@@ -5,6 +5,7 @@ import Button from "../Button";
 import NavbarLateral from "./NavbarLateral";
 import { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
+import ButtonPublicar from "../Buttons/ButtonPublicar/ButtonPublicar";
 
 const Navbar = () => {
   const location = useLocation();
@@ -15,14 +16,14 @@ const Navbar = () => {
   const iconUserProfileNavRef = useRef(null);
 
   useEffect(() => {
+    console.log("teste");
     const handleClickForaDoSubMenu = (event) => {
       if (
         divSubMenu.current &&
         iconUserProfileNavRef.current &&
         !divSubMenu.current.contains(event.target) &&
-        iconUserProfileNavRef.current.contains(event.target)
+        !iconUserProfileNavRef.current.contains(event.target)
       ) {
-        console.log(divSubMenu.current.contains(event.target));
         setSubMenuUserAberto(false);
       }
     };
@@ -67,13 +68,20 @@ const Navbar = () => {
                   <h1>Portal de Notícias</h1>
                 </Link>
                 {/* <button onClick={() => console.log(user)}>click</button> */}
-                {user.username && (
+                {user && user.username && (
                   <div className={styles.user_nav}>
+                    {user.user_type === 2 &&
+                      location.pathname !== "/publicar-noticia" && (
+                        <Link to={"/publicar-noticia"}>
+                          <ButtonPublicar />
+                        </Link>
+                      )}
                     <p>
                       Olá, <span>{user.username}</span>
                     </p>
                     <Icon
                       icon="ei:user"
+                      ref={iconUserProfileNavRef}
                       height={60}
                       style={{ color: "#d0d0d0", cursor: "pointer" }}
                       onClick={() => setSubMenuUserAberto((prev) => !prev)}
@@ -82,7 +90,6 @@ const Navbar = () => {
                       <div ref={divSubMenu} className={styles.user_submenu}>
                         <Link>
                           <Icon
-                            ref={iconUserProfileNavRef}
                             icon="subway:mark-2"
                             height={20}
                             style={{ color: "#000" }}
@@ -115,7 +122,7 @@ const Navbar = () => {
                   </div>
                 )}
 
-                {!user.username && (
+                {(!user || typeof user !== "object") && (
                   <div className={styles.nav_links}>
                     <Link to={"/about"}>Sobre</Link>
                     <Link to={"/login"}>Logar</Link>

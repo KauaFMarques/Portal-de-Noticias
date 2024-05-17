@@ -27,6 +27,25 @@
   justify-content: center;
 }
 
+.link_publicar > button {
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 5px 8px 5px 5px;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #3e57ff;
+  font-weight: 600;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-right: 20px;
+
+  &:hover {
+    background-color: #102ffa;
+  }
+}
+
 .user_nav p > span {
   font-weight: bold;
 }
