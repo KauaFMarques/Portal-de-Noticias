@@ -2,3 +2,5 @@
 /backend/functions/__pycache__
 /backend/testes/__pycache__
 /backend/user_registration/testes/__pycache__
+/backend/models/__pycache__
+/backend/routes

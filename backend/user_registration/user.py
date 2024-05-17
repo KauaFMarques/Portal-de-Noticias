@@ -80,6 +80,7 @@ def register_user():
     email = data['email']
     password = data['password']
     confirm_password = data['confirm_password']
+    user_type=1
     if("site" in data):
         site=data['site']
 
@@ -120,13 +121,13 @@ def register_user():
 
         if("site" in data):
             # Insere o novo usuário no banco de dados
-            cursor.execute("INSERT INTO users (username, email, password, token, site) VALUES (%s, %s, %s, %s, %s) RETURNING *",
-                        (username, email, hashed_password.decode('utf-8'), token, site))
+            cursor.execute("INSERT INTO users (username, email, password, token, site, user_type) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *",
+                        (username, email, hashed_password.decode('utf-8'), token, site, user_type))
             
         else:
             # Insere o novo usuário no banco de dados
-            cursor.execute("INSERT INTO users (username, email, password, token) VALUES (%s, %s, %s, %s) RETURNING *",
-                        (username, email, hashed_password.decode('utf-8'), token))
+            cursor.execute("INSERT INTO users (username, email, password, token, user_type) VALUES (%s, %s, %s, %s, %s) RETURNING *",
+                        (username, email, hashed_password.decode('utf-8'), token, user_type))
         
         new_user = cursor.fetchone()
         conn.commit()
@@ -148,6 +149,83 @@ def register_user():
         if 'conn' in locals():
             conn.close()
     return jsonify({'sucess': True, 'message': 'Usuário cadastrado com sucesso!'}), 201
+
+
+
+# Rota para cadastro de usuário
+@user_bp.route('/registerjournalist', methods=['POST'])
+def register_journalist():
+    #Extrai os dados json da solicitação HTTp usando o método get_json() do objeto request
+    data = request.get_json()
+    
+    #Aqui verifica se todos os campos obrigatorios estão preenchidos, se não retorna o erro
+    required_fields = ['username', 'email', 'password', 'confirm_password']
+    for field in required_fields:
+        if field not in data or not data[field]:
+            return jsonify({'error': f'Campo {field} ausente ou vazio!'}), 400
+
+    username = data['username']
+    email = data['email']
+    password = data['password']
+    confirm_password = data['confirm_password']
+    user_type=2
+    if("site" in data):
+        site=data['site']
+
+    # Verificar se o endereço de e-mail tem o domínio "@gmail.com"
+    if not data['email'].endswith('@gmail.com'):
+        return jsonify({'error': 'O endereço de e-mail deve ser do domínio "@gmail.com"'}), 400
+
+    # Verifica se antes do "@gmai.com" há pelo menos quatro caracteres
+    if len(data['email'].split('@')[0]) < 4:
+        return jsonify({'error': 'O nome de usuário no e-mail deve ter pelo menos 4 caracteres antes do "@"'}), 400
+
+    # Valida a força da senha (exemplo básico)
+    if len(data['password']) < 8:
+        return jsonify({'error': 'A senha deve ter pelo menos oito caracteres'}), 400
+
+    # Valida se o campo "name" tem pelo menos dois caracteres
+    if len(data['username']) < 2:
+        return jsonify({'error': 'O nome deve ter pelo menos dois caracteres'}), 400
+
+    if password != confirm_password:
+        return jsonify({'error': 'As senhas inseridas não coincidem!'}), 400
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+
+        # Verifica se o nome e email do usuário já existem no banco de dados, se não retorna erro
+        cursor.execute("SELECT * FROM users WHERE username=%s OR email=%s", (username, email))
+        if cursor.fetchone() is not None:
+            return jsonify({'error': 'Nome de usuário ou email já existe!'}), 400
+
+
+        #criptografia antes de inserção no banco de dados
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt())
+        
+        #criação do token
+        token=generate_token(data)
+
+        if("site" in data):
+            # Insere o novo jornalista no banco de dados
+            cursor.execute("INSERT INTO users (username, email, password, token, site, user_type) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *",
+                        (username, email, hashed_password.decode('utf-8'), token, site, user_type))
+            
+        else:
+            # Insere o novo jornalista no banco de dados
+            cursor.execute("INSERT INTO users (username, email, password, token, user_type) VALUES (%s, %s, %s, %s, %s) RETURNING *",
+                        (username, email, hashed_password.decode('utf-8'), token, user_type))
+        
+        new_user = cursor.fetchone()
+        conn.commit()
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'conn' in locals():
+            conn.close()
+    return jsonify({'sucess': True, 'message': 'Jornalista cadastrado com sucesso!'}), 201
 
 
 # Rota para login de usuário
