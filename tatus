@@ -1,0 +1,257 @@
+[33mcommit e4664ee8d32c414e76b370da2e796c23f1e9e7df[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mkdevelpoback[m[33m, [m[1;31morigin/kdevelpoback[m[33m)[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Fri May 17 15:00:29 2024 -0300
+
+    rotas para cadastro de jornalista(2) e usuário(1)
+
+[33mcommit 34930568c4c8dff01888561825b54dbd90e65288[m[33m ([m[1;31morigin/featurekaua[m[33m, [m[1;32mfeaturekaua[m[33m)[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Thu May 16 14:36:45 2024 -0300
+
+    Adicionando a correção de erro de login de joão vitor
+
+[33mcommit 61c63551e0667299aef6ab6b8ba083a1c993d789[m
+Merge: 512d836 04a7407
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Thu May 16 09:39:58 2024 -0300
+
+    adicionando a rota adicionar noticias
+
+[33mcommit 512d8362e001a3df47947516c64bd068c1a36216[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Thu May 16 00:07:09 2024 -0300
+
+    commit da rota de cadastro de noticias, e um pequeno teste experimental
+
+[33mcommit 04a7407c960a523d1fb3ad609a5815e923735202[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Mon May 13 21:09:00 2024 -0300
+
+    requiements atualizado e tentar testar as chaves
+
+[33mcommit e5107dff7e58dbda009c62fdd9cd77f347444e34[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Sat May 11 22:31:00 2024 -0300
+
+    token e criptografia resolvidos
+
+[33mcommit 34cf93d34a46a9b1db0df699d153c716d0c21f24[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Tue May 7 16:17:19 2024 -0300
+
+    teste depois da formatação e recuperação
+
+[33mcommit 13d71c39c5a53e4055b6b02f9fe0212a5865c337[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Fri Apr 26 17:10:15 2024 -0300
+
+    alteração do login de joão vitor
+
+[33mcommit 565081af5f3b3800706f98084187f6e3b5a73201[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Fri Apr 26 16:55:20 2024 -0300
+
+    rotas no local certo
+
+[33mcommit 083f44fc9428d64586366a8f665c5a2c2fe73f2f[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Fri Apr 26 15:02:18 2024 -0300
+
+    leeves alterações
+
+[33mcommit a309587ef9e3d2959e04d727c7a7622119a49cc0[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Fri Apr 26 14:49:42 2024 -0300
+
+    retorno de json no register, junto com criptografia e token
+
+[33mcommit bf26a252f70b0d108f821b1dff7a87094482bb9b[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Wed Apr 24 17:37:09 2024 -0300
+
+    alterações feitas para verificação
+
+[33mcommit 7f29e4f3f15e29624309519f3bf458f5e81e00f6[m
+Merge: 4b0990d daadf7a
+Author: KauaFMarques <116847328+KauaFMarques@users.noreply.github.com>
+Date:   Sun Apr 14 16:05:47 2024 -0300
+
+    Merge pull request #4 from KauaFMarques/adds-rotas-novas-e-populando-bd
+    
+    Adds rotas novas e populando bd
+
+[33mcommit daadf7a53dc67415a443da87daad7d6989ea45d1[m
+Author: JVitor21 <jvlimasantos0@gmail.com>
+Date:   Sat Apr 13 17:24:52 2024 -0300
+
+    fazendo o envio de dados da rota login e corrigingo erros
+
+[33mcommit 4914682acbbcc67f41f56862414fc6827d18f9df[m
+Author: JVitor21 <jvlimasantos0@gmail.com>
+Date:   Sat Apr 13 17:05:44 2024 -0300
+
+    Outra correção em cadastro, usando with
+
+[33mcommit bf84c860056e1046fc1fb3ba1f2a26fb3581cb24[m
+Author: JVitor21 <jvlimasantos0@gmail.com>
+Date:   Sat Apr 13 15:47:33 2024 -0300
+
+    Corrigindo erro na rota cadastro
+
+[33mcommit 703c4ea93dcd0908478af33f0d31c78e718b5123[m
+Author: JVitor21 <jvlimasantos0@gmail.com>
+Date:   Fri Apr 12 16:13:50 2024 -0300
+
+    Alteraçao para novas rotas em app.py
+
+[33mcommit b83e54914628e0a9e16362a26a97fa618878948b[m
+Author: JVitor21 <jvlimasantos0@gmail.com>
+Date:   Fri Apr 12 16:11:44 2024 -0300
+
+    Add de rotas para sites e noticias
+
+[33mcommit 4b0990dae23f109d2a3c30027e239c5e7cdf6ce1[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Fri Apr 12 16:08:45 2024 -0300
+
+    reorganização das rotas de categoria por tipo
+
+[33mcommit 371cdc0a3122a659f9ed68ab0701e7632037d65e[m
+Author: EngelsAS <engelsantero@gmail.com>
+Date:   Thu Apr 11 21:00:46 2024 -0300
+
+    Back e front integrados nas paginas SignUp e SignIn, layou da pagina de cadastro de site feito
+
+[33mcommit 8b7743051b7d73532a67b9cb2ec28275e588eff6[m
+Merge: aabb073 ed269b1
+Author: Engels Antero <engelsantero@gmail.com>
+Date:   Tue Apr 9 22:39:50 2024 -0300
+
+    Merge pull request #3 from KauaFMarques/scrum_13_criacao_da_pagina_home
+    
+    Scrum 13 criacao da pagina home
+
+[33mcommit aabb0734a646f08c6ca607b169077a691d976039[m
+Author: JVitor21 <jvlimasantos0@gmail.com>
+Date:   Tue Apr 9 16:56:28 2024 -0300
+
+    alteração em db.py
+
+[33mcommit 2afeddedad9030269efe3d1653de227ec070f96b[m
+Author: JVitor21 <jvlimasantos0@gmail.com>
+Date:   Tue Apr 9 15:53:13 2024 -0300
+
+    adicionando chave e blueprint
+
+[33mcommit d02799d268556a1437c9978e8d62a42a57980220[m
+Author: JVitor21 <jvlimasantos0@gmail.com>
+Date:   Tue Apr 9 15:39:46 2024 -0300
+
+    Mudanca no cadastro
+
+[33mcommit ed269b12a3982a40edaa2bf7c473ba1f22f38832[m
+Author: EngelsAS <engelsantero@gmail.com>
+Date:   Fri Apr 5 01:00:00 2024 -0300
+
+    ajuste footer
+
+[33mcommit d565b2af14faa242b4b132bfb5dc3e9a58758503[m
+Author: EngelsAS <engelsantero@gmail.com>
+Date:   Fri Apr 5 00:56:00 2024 -0300
+
+    Finalização layout pagina Home
+
+[33mcommit edbb413a1727723523685bab73044d28b7583614[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Thu Apr 4 16:43:23 2024 -0300
+
+    cadastro de usuários de joão vitor
+
+[33mcommit e53e353039036535e88fa9ffa34aef794f2215ed[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Wed Apr 3 15:06:35 2024 -0300
+
+    correção de pastas
+
+[33mcommit 0cc5a65a37e0a054a5a03a4ff0f112638b059834[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Wed Apr 3 15:04:37 2024 -0300
+
+    conexão com o bd para o ig de noticias por categoria de notícia
+
+[33mcommit fdf7a7298c0b4fa3806a1eaed977fca0aa91f0a1[m
+Merge: 9687ae4 8c39188
+Author: Engels Antero <engelsantero@gmail.com>
+Date:   Tue Apr 2 11:34:43 2024 -0300
+
+    Merge pull request #2 from KauaFMarques/develop
+    
+    Develop
+
+[33mcommit 8c391884b41c1c522b8bf1a171369790108adc34[m
+Merge: d46d445 0fee9fd
+Author: Engels Antero <engelsantero@gmail.com>
+Date:   Tue Apr 2 11:32:56 2024 -0300
+
+    Merge pull request #1 from KauaFMarques/main
+    
+    pastas ajustadas
+
+[33mcommit d46d44515042c3a2ae96d38d826b3537a9a2190b[m
+Author: Engels Antero <engelsantero@gmail.com>
+Date:   Tue Apr 2 11:31:47 2024 -0300
+
+    Delete BackEndPortaldeNoticias/.idea directory
+
+[33mcommit bc516fcbcd5eb0c6517029522a5d47d1f58a52ed[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Tue Apr 2 11:29:25 2024 -0300
+
+    atualizado
+
+[33mcommit 0fee9fdcc59b7f0f175e7d00f3bf46a60aed855d[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: KauaFMarques <kauamarques52@outlook.com>
+Date:   Tue Apr 2 11:21:23 2024 -0300
+
+    pastas ajustadas
+
+[33mcommit 9687ae4f3c6cdfcd5c85dcee99d2c7251f28c759[m
+Author: EngelsAS <engelsantero@gmail.com>
+Date:   Sat Mar 30 00:37:51 2024 -0300
+
+    atualizacao Readme
+
+[33mcommit b2d96c467947aaf72f5b495f512cbd4a1c739da1[m
+Author: EngelsAS <engelsantero@gmail.com>
+Date:   Sat Mar 30 00:37:14 2024 -0300
+
+    Atualizacao do layout da pagina home e modificacao nos espaçamentos da navbar
+
+[33mcommit 1847dcd69de2bebe95b3360e7773e292cde3e5f9[m
+Author: EngelsAS <engelsantero@gmail.com>
+Date:   Fri Mar 29 02:10:36 2024 -0300
+
+    Tarefa: Criar front end de cadastro
+
+[33mcommit 6f9ef2daa38c9645af8441be5b816bfc14e2e5b2[m
+Author: EngelsAS <engelsantero@gmail.com>
+Date:   Fri Mar 29 00:05:44 2024 -0300
+
+    scrum_13_commit_1
+
+[33mcommit a6362703a90b4b99c3c4357f0c52e5bf972ca88b[m
+Author: EngelsAS <engelsantero@gmail.com>
+Date:   Thu Mar 28 19:42:59 2024 -0300
+
+    readme
+
+[33mcommit ebeb64b24160fc081ae3256f964728dfec8e7c4c[m
+Author: EngelsAS <engelsantero@gmail.com>
+Date:   Thu Mar 28 19:41:30 2024 -0300
+
+    front end e dependencias instaladas
+
+[33mcommit e3ea07ebea6f23a2ebea38583ff3579325a6a1a3[m
+Author: KauaFMarques <116847328+KauaFMarques@users.noreply.github.com>
+Date:   Tue Mar 19 13:51:16 2024 -0300
+

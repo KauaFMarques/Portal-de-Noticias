@@ -265,6 +265,7 @@ def login():
             #print((bytes.fromhex(hashed_password).decode))
             if bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8')):
                 user_data = {
+                    'user_type': user[5],
                     'token':user[4],
                     'username': user[1],
                     'email': user[2],
