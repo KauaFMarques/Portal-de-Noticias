@@ -2,8 +2,4 @@ Flask
 psycopg2
 PyJWT
 bcrypt
-<<<<<<< HEAD
-flask
-=======
 cryptography
->>>>>>> 04a7407c960a523d1fb3ad609a5815e923735202
