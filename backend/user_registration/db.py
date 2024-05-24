@@ -7,7 +7,7 @@ def connect_db():
     conn = psycopg2.connect(
         dbname="portalDeNoticias",
         user="postgres",
-        password="mk785",
+        password="mk875",
         host="localhost",
         port='5432'
     )
