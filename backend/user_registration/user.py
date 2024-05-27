@@ -249,20 +249,6 @@ def login():
         # Se o usuário existir no banco de dados, verifica se a senha fornecida corresponde à senha armazenada
         if user:
             hashed_password = user[3]  # Senha criptografada armazenada no banco de dados
-            #huj=hashed_password
-            #print("huj:", huj)
-            
-            """print("Hashed Password decodificado):", hashed_password.encode())
-            print("senha do usuario:", password)
-            print("tipo de dados:")
-            print(type(password.encode()))
-            print(type(hashed_password.encode()))"""
-            """print("------")
-            hash = bytes.fromhex(hashed_password)
-            print(hash) # $2b$12$GBx96IiULJ9Ja3BfSfFwseai8To20fr.xqdhHRv6qegu7hzCYeByu
-            verified = bcrypt.checkpw('senha7894'.encode('utf-8'), hash)
-            print(verified) # True"""
-            #print((bytes.fromhex(hashed_password).decode))
             if bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8')):
                 user_data = {
                     'user_type': user[5],
@@ -272,6 +258,7 @@ def login():
                     'id': user[0]
                 }
                 session['logged_in'] = True
+                session['user_id'] = user[0]  # Armazena o ID do usuário na sessão
                 response_data = {
                     'success': True,
                     'message': 'Login efetuado com sucesso!',
@@ -316,12 +303,16 @@ def profile():
 
 
     
-# Rota para cadastrar/importar notícias
 @user_bp.route('/cadastrarnoticia', methods=['POST'])
 def cadastrar_noticia():
     # Verifica se o usuário está autenticado
     if not session.get('logged_in'):
         return jsonify({'error': 'Usuário não autenticado'}), 401
+    
+    # Verifica se o id do jornalista existe na sessão
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'ID de usuário não localizado'}), 401
 
     # Extrai os dados JSON da solicitação HTTP
     data = request.get_json()
@@ -337,8 +328,123 @@ def cadastrar_noticia():
         cursor = conn.cursor()
 
         # Insere a nova notícia no banco de dados
-        cursor.execute("INSERT INTO Sites_noticias (titulo, foto, resumo, noticia, site_id, categoria_id) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *",
-                       (data['titulo'], data['foto'], data['resumo'], data['noticia'], data['site_id'], data['categoria_id']))
+        cursor.execute(
+            "INSERT INTO Sites_noticias (titulo, foto, resumo, noticia, site_id, categoria_id, jornalista_id) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *",
+            (data['titulo'], data['foto'], data['resumo'], data['noticia'], data['site_id'], data['categoria_id'], user_id)
+        )
+        
+        new_noticia = cursor.fetchone()
+        conn.commit()
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'conn' in locals():
+            conn.close()
+
+    return jsonify({'success': True, 'message': 'Notícia cadastrada com sucesso!', 'noticia': new_noticia}), 201
+
+
+# Rota para editar uma notícia
+@user_bp.route('/editarnoticia/<int:noticia_id>', methods=['PUT'])
+def editar_noticia(noticia_id):
+    if not session.get('logged_in'):
+        return jsonify({'error': 'Usuário não autenticado'}), 401
+
+    user_id = session.get('user_id')
+
+    data = request.get_json()
+    titulo = data.get('titulo')
+    foto = data.get('foto')
+    resumo = data.get('resumo')
+    noticia = data.get('noticia')
+    site_id = data.get('site_id')
+    categoria_id = data.get('categoria_id')
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+
+        # Verifica se a notícia pertence ao usuário que está tentando editá-la
+        cursor.execute("SELECT * FROM Sites_noticias WHERE id = %s AND jornalista_id = %s", (noticia_id, user_id))
+        noticia_existente = cursor.fetchone()
+        if not noticia_existente:
+            return jsonify({'error': 'Notícia não encontrada ou você não tem permissão para editá-la'}), 404
+
+        # Atualiza os dados da notícia no banco de dados
+        cursor.execute("UPDATE Sites_noticias SET titulo=%s, foto=%s, resumo=%s, noticia=%s, site_id=%s, categoria_id=%s WHERE id=%s",
+                       (titulo, foto, resumo, noticia, site_id, categoria_id, noticia_id))
+        conn.commit()
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'conn' in locals():
+            conn.close()
+
+    return jsonify({'success': True, 'message': 'Notícia editada com sucesso!'}), 200
+
+# Rota para excluir uma notícia
+@user_bp.route('/excluirnoticia/<int:noticia_id>', methods=['DELETE'])
+def excluir_noticia(noticia_id):
+    if not session.get('logged_in'):
+        return jsonify({'error': 'Usuário não autenticado'}), 401
+
+    user_id = session.get('user_id')
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+
+        # Verifica se a notícia pertence ao usuário que está tentando excluí-la
+        cursor.execute("SELECT * FROM Sites_noticias WHERE id = %s AND jornalista_id = %s", (noticia_id, user_id))
+        noticia_existente = cursor.fetchone()
+        if not noticia_existente:
+            return jsonify({'error': 'Notícia não encontrada ou você não tem permissão para excluí-la'}), 404
+
+        # Exclui a notícia do banco de dados
+        cursor.execute("DELETE FROM Sites_noticias WHERE id=%s", (noticia_id,))
+        conn.commit()
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'conn' in locals():
+            conn.close()
+
+    return jsonify({'success': True, 'message': 'Notícia excluída com sucesso!'}), 200
+
+
+
+@user_bp.route('/publicar', methods=['POST'])
+def publicar_noticia():
+    # Verifica se o usuário é um usuário do tipo jornalista
+    if 'user_id' not in session or 'user_type' not in session or session['user_type'] != 'jornalista':
+        return jsonify({'error': 'Acesso negado'}), 403
+    
+    # Verifica se o id do jornalista existe na sessão
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'ID de usuário não localizado'}), 401
+
+    # Extrai os dados JSON da solicitação HTTP
+    data = request.get_json()
+
+    # Verifica se todos os campos obrigatórios estão presentes nos dados da solicitação
+    required_fields = ['titulo', 'foto', 'resumo', 'noticia', 'site_id', 'categoria_id']
+    for field in required_fields:
+        if field not in data or not data[field]:
+            return jsonify({'error': f'Campo {field} ausente ou vazio!'}), 400
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+
+        # Insere a nova notícia no banco de dados
+        cursor.execute(
+            "INSERT INTO Sites_noticias (titulo, foto, resumo, noticia, site_id, categoria_id, jornalista_id) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *",
+            (data['titulo'], data['foto'], data['resumo'], data['noticia'], data['site_id'], data['categoria_id'], user_id)
+        )
         
         new_noticia = cursor.fetchone()
         conn.commit()
