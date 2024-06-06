@@ -4,3 +4,4 @@
 /backend/user_registration/testes/__pycache__
 /backend/models/__pycache__
 /backend/routes
+/backend/user_registration/test_app.py

@@ -4,37 +4,37 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))  # Adiciona o diretório pai ao caminho de pesquisa de módulos
 from user import *
 from app import app 
+from unittest.mock import patch, MagicMock
 
 
 class TestApp(unittest.TestCase):
-
-        
-    # Carregar a chave pública
-    try:
-        with open('public_key.pem', 'r') as f:
-            public_key = f.read()
-    except FileNotFoundError:
-        print("Arquivo public_key.pem não encontrado.")
-    except Exception as e:
-        print("Erro ao ler o arquivo public_key.pem:", e)
-
-    # Carregar a chave privada
-    with open('private_key.pem', 'r') as f:
-        private_key = f.read()
-    def generate_token(payload_data):
-        # Gerar o token JWT assinado com a chave privada
-        token = jwt.encode(
-            payload=payload_data,
-            key=private_key,
-            algorithm='RS256',
-        )
-        
-        return token
     
     # Configuração inicial para cada teste
     def setUp(self):
         app.config['TESTING'] = True
         self.app = app.test_client()
+
+            # Carregar a chave pública
+        try:
+            with open('public_key.pem', 'r') as f:
+                public_key = f.read()
+        except FileNotFoundError:
+            print("Arquivo public_key.pem não encontrado.")
+        except Exception as e:
+            print("Erro ao ler o arquivo public_key.pem:", e)
+
+        # Carregar a chave privada
+        with open('private_key.pem', 'r') as f:
+            private_key = f.read()
+        def generate_token(payload_data):
+            # Gerar o token JWT assinado com a chave privada
+            token = jwt.encode(
+                payload=payload_data,
+                key=private_key,
+                algorithm='RS256',
+            )
+            
+            return token
 
     # Teste para a rota '/'
     def test_hello_world(self):

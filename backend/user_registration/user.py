@@ -318,7 +318,7 @@ def cadastrar_noticia():
     data = request.get_json()
 
     # Verifica se todos os campos obrigatórios estão presentes nos dados da solicitação
-    required_fields = ['titulo', 'foto', 'resumo', 'noticia', 'site_id', 'categoria_id']
+    required_fields = ['titulo', 'foto', 'subtitulo', 'noticia', 'categoria_id']
     for field in required_fields:
         if field not in data or not data[field]:
             return jsonify({'error': f'Campo {field} ausente ou vazio!'}), 400
@@ -329,8 +329,8 @@ def cadastrar_noticia():
 
         # Insere a nova notícia no banco de dados
         cursor.execute(
-            "INSERT INTO Sites_noticias (titulo, foto, resumo, noticia, site_id, categoria_id, jornalista_id) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *",
-            (data['titulo'], data['foto'], data['resumo'], data['noticia'], data['site_id'], data['categoria_id'], user_id)
+            "INSERT INTO Sites_noticias (titulo, foto, subtitulo, noticia, categoria_id, jornalista_id) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *",
+            (data['titulo'], data['foto'], data['subtitulo'], data['noticia'], data['categoria_id'], user_id)
         )
         
         new_noticia = cursor.fetchone()
@@ -356,7 +356,7 @@ def editar_noticia(noticia_id):
     data = request.get_json()
     titulo = data.get('titulo')
     foto = data.get('foto')
-    resumo = data.get('resumo')
+    subtitulo = data.get('subtitulo')
     noticia = data.get('noticia')
     site_id = data.get('site_id')
     categoria_id = data.get('categoria_id')
@@ -372,8 +372,8 @@ def editar_noticia(noticia_id):
             return jsonify({'error': 'Notícia não encontrada ou você não tem permissão para editá-la'}), 404
 
         # Atualiza os dados da notícia no banco de dados
-        cursor.execute("UPDATE Sites_noticias SET titulo=%s, foto=%s, resumo=%s, noticia=%s, site_id=%s, categoria_id=%s WHERE id=%s",
-                       (titulo, foto, resumo, noticia, site_id, categoria_id, noticia_id))
+        cursor.execute("UPDATE Sites_noticias SET titulo=%s, foto=%s, subtitulo=%s, noticia=%s, categoria_id=%s WHERE id=%s",
+                       (titulo, foto, subtitulo, noticia, site_id, categoria_id, noticia_id))
         conn.commit()
 
     except Exception as e:
@@ -413,46 +413,3 @@ def excluir_noticia(noticia_id):
             conn.close()
 
     return jsonify({'success': True, 'message': 'Notícia excluída com sucesso!'}), 200
-
-
-
-@user_bp.route('/publicar', methods=['POST'])
-def publicar_noticia():
-    # Verifica se o usuário é um usuário do tipo jornalista
-    if 'user_id' not in session or 'user_type' not in session or session['user_type'] != 'jornalista':
-        return jsonify({'error': 'Acesso negado'}), 403
-    
-    # Verifica se o id do jornalista existe na sessão
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({'error': 'ID de usuário não localizado'}), 401
-
-    # Extrai os dados JSON da solicitação HTTP
-    data = request.get_json()
-
-    # Verifica se todos os campos obrigatórios estão presentes nos dados da solicitação
-    required_fields = ['titulo', 'foto', 'resumo', 'noticia', 'site_id', 'categoria_id']
-    for field in required_fields:
-        if field not in data or not data[field]:
-            return jsonify({'error': f'Campo {field} ausente ou vazio!'}), 400
-
-    try:
-        conn = connect_db()
-        cursor = conn.cursor()
-
-        # Insere a nova notícia no banco de dados
-        cursor.execute(
-            "INSERT INTO Sites_noticias (titulo, foto, resumo, noticia, site_id, categoria_id, jornalista_id) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *",
-            (data['titulo'], data['foto'], data['resumo'], data['noticia'], data['site_id'], data['categoria_id'], user_id)
-        )
-        
-        new_noticia = cursor.fetchone()
-        conn.commit()
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-    finally:
-        if 'conn' in locals():
-            conn.close()
-
-    return jsonify({'success': True, 'message': 'Notícia cadastrada com sucesso!', 'noticia': new_noticia}), 201
