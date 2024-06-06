@@ -306,19 +306,19 @@ def profile():
 @user_bp.route('/cadastrarnoticia', methods=['POST'])
 def cadastrar_noticia():
     # Verifica se o usuário está autenticado
-    if not session.get('logged_in'):
-        return jsonify({'error': 'Usuário não autenticado'}), 401
+    #if not session.get('logged_in'):
+    #    return jsonify({'error': 'Usuário não autenticado'}), 401
     
     # Verifica se o id do jornalista existe na sessão
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({'error': 'ID de usuário não localizado'}), 401
+    #user_id = session.get('user_id')
+    #if not user_id:
+    #    return jsonify({'error': 'ID de usuário não localizado'}), 401
 
     # Extrai os dados JSON da solicitação HTTP
     data = request.get_json()
 
     # Verifica se todos os campos obrigatórios estão presentes nos dados da solicitação
-    required_fields = ['titulo', 'foto', 'subtitulo', 'noticia', 'categoria_id']
+    required_fields = ['titulo', 'foto', 'subtitulo', 'noticia', 'categoria_id','user_id']
     for field in required_fields:
         if field not in data or not data[field]:
             return jsonify({'error': f'Campo {field} ausente ou vazio!'}), 400
@@ -330,7 +330,7 @@ def cadastrar_noticia():
         # Insere a nova notícia no banco de dados
         cursor.execute(
             "INSERT INTO Sites_noticias (titulo, foto, subtitulo, noticia, categoria_id, jornalista_id) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *",
-            (data['titulo'], data['foto'], data['subtitulo'], data['noticia'], data['categoria_id'], user_id)
+            (data['titulo'], data['foto'], data['subtitulo'], data['noticia'], data['categoria_id'], data['user_id'])
         )
         
         new_noticia = cursor.fetchone()
