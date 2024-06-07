@@ -348,32 +348,26 @@ def cadastrar_noticia():
 # Rota para editar uma notícia
 @user_bp.route('/editarnoticia/<int:noticia_id>', methods=['PUT'])
 def editar_noticia(noticia_id):
-    if not session.get('logged_in'):
-        return jsonify({'error': 'Usuário não autenticado'}), 401
-
-    user_id = session.get('user_id')
-
     data = request.get_json()
     titulo = data.get('titulo')
     foto = data.get('foto')
     subtitulo = data.get('subtitulo')
     noticia = data.get('noticia')
-    site_id = data.get('site_id')
     categoria_id = data.get('categoria_id')
 
     try:
         conn = connect_db()
         cursor = conn.cursor()
 
-        # Verifica se a notícia pertence ao usuário que está tentando editá-la
-        cursor.execute("SELECT * FROM Sites_noticias WHERE id = %s AND jornalista_id = %s", (noticia_id, user_id))
+        # Verifica se a notícia existe antes de atualizar
+        cursor.execute("SELECT * FROM Sites_noticias WHERE id = %s ", (noticia_id,))
         noticia_existente = cursor.fetchone()
         if not noticia_existente:
             return jsonify({'error': 'Notícia não encontrada ou você não tem permissão para editá-la'}), 404
 
         # Atualiza os dados da notícia no banco de dados
         cursor.execute("UPDATE Sites_noticias SET titulo=%s, foto=%s, subtitulo=%s, noticia=%s, categoria_id=%s WHERE id=%s",
-                       (titulo, foto, subtitulo, noticia, site_id, categoria_id, noticia_id))
+                       (titulo, foto, subtitulo, noticia, categoria_id, noticia_id))
         conn.commit()
 
     except Exception as e:
@@ -384,20 +378,22 @@ def editar_noticia(noticia_id):
 
     return jsonify({'success': True, 'message': 'Notícia editada com sucesso!'}), 200
 
+
 # Rota para excluir uma notícia
 @user_bp.route('/excluirnoticia/<int:noticia_id>', methods=['DELETE'])
 def excluir_noticia(noticia_id):
-    if not session.get('logged_in'):
-        return jsonify({'error': 'Usuário não autenticado'}), 401
-
-    user_id = session.get('user_id')
+    # Comentando a verificação de usuário
+    # if not session.get('logged_in'):
+    #     return jsonify({'error': 'Usuário não autenticado'}), 401
+    #
+    # user_id = session.get('user_id')
 
     try:
         conn = connect_db()
         cursor = conn.cursor()
 
         # Verifica se a notícia pertence ao usuário que está tentando excluí-la
-        cursor.execute("SELECT * FROM Sites_noticias WHERE id = %s AND jornalista_id = %s", (noticia_id, user_id))
+        cursor.execute("SELECT * FROM Sites_noticias WHERE id = %s ", (noticia_id,))
         noticia_existente = cursor.fetchone()
         if not noticia_existente:
             return jsonify({'error': 'Notícia não encontrada ou você não tem permissão para excluí-la'}), 404
@@ -413,3 +409,4 @@ def excluir_noticia(noticia_id):
             conn.close()
 
     return jsonify({'success': True, 'message': 'Notícia excluída com sucesso!'}), 200
+
