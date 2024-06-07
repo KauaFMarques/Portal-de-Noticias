@@ -43,14 +43,14 @@ const PublicarNoticia = () => {
           console.log(error);
         });
     } else {
-      setValuesNoticia({
+      setValuesNoticia((prev) => ({
+        ...prev,
         titulo: "",
         foto: "",
         subtitulo: "",
         noticia: "",
         categoria_id: 1,
-        user_id: user.id,
-      });
+      }));
     }
   }, [idParams]);
 
