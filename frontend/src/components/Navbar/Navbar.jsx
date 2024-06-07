@@ -104,14 +104,17 @@ const Navbar = () => {
                           />
                           <p>Notícias Curtidas</p>
                         </Link>
-                        <Link to={"/noticias-publicadas"}>
-                          <Icon
-                            icon="material-symbols:news"
-                            height={20}
-                            style={{ color: "#000" }}
-                          />
-                          <p>Notícias Publicadas</p>
-                        </Link>
+                        {user.user_type === 2 && (
+                          <Link to={"/noticias-publicadas"}>
+                            <Icon
+                              icon="material-symbols:news"
+                              height={20}
+                              style={{ color: "#000" }}
+                            />
+                            <p>Notícias Publicadas</p>
+                          </Link>
+                        )}
+
                         <button
                           onClick={() => {
                             localStorage.removeItem("token");

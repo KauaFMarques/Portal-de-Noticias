@@ -38,6 +38,16 @@ function App() {
           />
           <Route path="/noticia/:id" element={<Noticia />} />
           <Route
+            path="/editar-noticia/:id"
+            element={
+              user && user.user_type === 2 ? (
+                <PublicarNoticia />
+              ) : (
+                <Navigate to={"/"} />
+              )
+            }
+          />
+          <Route
             path="/noticias-publicadas"
             element={
               user && user.user_type === 2 ? (

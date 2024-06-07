@@ -21,6 +21,22 @@ const NoticiasPublicadas = () => {
     });
   }, [user]);
 
+  const deletarNoticia = (idNoticia) => {
+    console.log(idNoticia);
+
+    axiosLocalApi
+      .delete(`/excluirnoticia/${idNoticia}`)
+      .then((resp) => {
+        setNoticiasPublicadas((prev) =>
+          [...prev].filter((item) => item.id !== idNoticia)
+        );
+        console.log(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     fetchNoticias();
   }, [fetchNoticias]);
@@ -35,10 +51,7 @@ const NoticiasPublicadas = () => {
               style={index === 0 ? { border: "none" } : null}
             >
               <div className="col-4">
-                <div
-                  className={styles.div_img_noticia}
-                  style={{ height: "300px" }}
-                >
+                <div className={"div_img_noticia"} style={{ height: "300px" }}>
                   <img src={item.foto} />
                 </div>
               </div>
@@ -64,9 +77,24 @@ const NoticiasPublicadas = () => {
           >
             <Icon
               icon="material-symbols:delete"
+              className="hover_div_2"
               height={25}
-              style={{ color: "red", cursor: "pointer" }}
+              onClick={() => deletarNoticia(item.id)}
+              style={{ color: "red", cursor: "pointer", padding: "10px" }}
             />
+            <Link to={`/editar-noticia/${item.id}`}>
+              <Icon
+                icon="material-symbols:edit"
+                className="hover_div_2"
+                height={25}
+                style={{
+                  color: "blue",
+                  cursor: "pointer",
+                  marginLeft: "10px",
+                  padding: "10px",
+                }}
+              />
+            </Link>
           </div>
         </div>
       ))}
