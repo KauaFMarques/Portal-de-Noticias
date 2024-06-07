@@ -8,8 +8,10 @@ import Footer from "./components/Footer";
 import SignIn from "./pages/SignIn";
 import SiteSignUp from "./pages/SiteSignUp";
 import PublicarNoticia from "./pages/PublicarNoticia/PublicarNoticia";
+import NoticiasPublicadas from "./pages/NoticiasPublicadas/NoticiasPublicadas";
 import { useContext } from "react";
 import { UserContext } from "./contexts/UserContext";
+import Noticia from "./pages/Noticia/Noticia";
 
 function App() {
   const { user } = useContext(UserContext);
@@ -29,6 +31,17 @@ function App() {
             element={
               user && user.user_type === 2 ? (
                 <PublicarNoticia />
+              ) : (
+                <Navigate to={"/"} />
+              )
+            }
+          />
+          <Route path="/noticia/:id" element={<Noticia />} />
+          <Route
+            path="/noticias-publicadas"
+            element={
+              user && user.user_type === 2 ? (
+                <NoticiasPublicadas />
               ) : (
                 <Navigate to={"/"} />
               )

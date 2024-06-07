@@ -13,7 +13,7 @@ const PublicarNoticia = () => {
     foto: "",
     subtitulo: "",
     noticia: "",
-    categoria_id: 0,
+    categoria_id: 1,
     user_id: user.id,
   });
   const [messageConfig, setMessageConfig] = useState({
@@ -46,7 +46,7 @@ const PublicarNoticia = () => {
 
   return (
     <div className="container_geral">
-      <button onClick={() => console.log(valuesNoticia)}>console</button>
+      {/* <button onClick={() => console.log(valuesNoticia)}>console</button> */}
       <div className={`${styles.form_cadastro_noticia} flex_row`}>
         <div className="col-7">
           <label>

@@ -89,6 +89,29 @@ a.link_button:hover {
   height: 100%;
 }
 
+.hover_div:hover {
+  transition: 0.2s;
+  background-color: #f7f6f5;
+}
+
+.div_img_noticia {
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* borders */
+
+.border-red {
+  border: 1px solid red;
+}
+
+.border-blue {
+  border: 1px solid blue;
+}
+
 /* grid cols */
 
 .col-1 {
