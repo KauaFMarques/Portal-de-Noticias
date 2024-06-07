@@ -45,7 +45,11 @@ const Home = () => {
                 (item) => item.value === noticias[0].categoria_id
               )?.label
             }
-            resume={noticias[0].noticia}
+            resume={
+              noticias[0].noticia.length > 325
+                ? noticias[0].noticia.substring(0, 325) + "..."
+                : noticias[0].noticia
+            }
           />
         </div>
         <div className={`col-5 ${styles.div_noticias_laterais}`}>

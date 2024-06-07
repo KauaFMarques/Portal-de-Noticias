@@ -2,16 +2,19 @@ import styles from "./PublicarNoticia.module.css";
 import { categorysLabelValue } from "../../utils/categorys";
 import ButtonPublicar from "../../components/Buttons/ButtonPublicar/ButtonPublicar";
 import { axiosLocalApi } from "../../utils/axiosInstance";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Message from "../../components/Message";
+import { UserContext } from "../../contexts/UserContext";
 
 const PublicarNoticia = () => {
+  const { user } = useContext(UserContext);
   const [valuesNoticia, setValuesNoticia] = useState({
     titulo: "",
     foto: "",
     subtitulo: "",
     noticia: "",
     categoria_id: 0,
+    user_id: user.id,
   });
   const [messageConfig, setMessageConfig] = useState({
     type: "",
