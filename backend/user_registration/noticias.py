@@ -16,10 +16,10 @@ cur = conn.cursor()
 
 
 # Rota para listar todas as notícias de um site específico
-@noticias_bp.route('/sites/<int:site_id>/noticias', methods=['GET'])
-def get_site_noticias(site_id):
-    print("Debug: Entrando na rota /sites/<int:site_id>/noticias")
-    cur.execute("SELECT * FROM Sites_noticias WHERE site_id = %s", (site_id,))
+@noticias_bp.route('/sites/<int:id>/noticias', methods=['GET'])
+def get_site_noticias(id):
+    print("Debug: Entrando na rota /sites/<int:id>/noticias")
+    cur.execute("SELECT * FROM Sites_noticias WHERE id = %s", (id))
     noticias = cur.fetchall()
     print("Debug: Notícias recuperadas:")
     return jsonify(noticias)
@@ -81,3 +81,23 @@ def get_todas_noticias_sites():
         noticias_list.append(noticia_dict)
 
     return jsonify(noticias_list)
+
+# Rota para exibir uma notícia por ID
+@noticias_bp.route('/noticias/<int:noticia_id>', methods=['GET'])
+def get_noticia_por_id(noticia_id):
+    print(f"Debug: Entrando na rota /noticias/{noticia_id}")
+    cur.execute("SELECT id, foto, titulo, subtitulo, noticia, categoria_id, jornalista_id FROM Sites_noticias WHERE id = %s", (noticia_id,))
+    noticia = cur.fetchone()
+    if noticia:
+        noticia_dict = {
+            'id': noticia[0],
+            'foto': noticia[1],
+            'titulo': noticia[2],
+            'subtitulo': noticia[3],
+            'noticia': noticia[4],
+            'categoria_id': noticia[5],
+            'jornalista_id': noticia[6]
+        }
+        return jsonify(noticia_dict)
+    else:
+        return jsonify({'error': 'Notícia não encontrada'}), 404
