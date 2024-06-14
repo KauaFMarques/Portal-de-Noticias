@@ -4,8 +4,10 @@ import styles from "./SignUp.module.css";
 import { axiosLocalApi } from "../utils/axiosInstance";
 import HeaderSignInUp from "../components/HeaderSignInUp";
 import Message from "../components/Message";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [signUpValues, setSignUpValues] = useState({
     username: "",
     email: "",
@@ -24,7 +26,7 @@ const SignUp = () => {
     setRequisicaoEmProgresso(true);
 
     axiosLocalApi
-      .post("/user/register", signUpValues)
+      .post("/register", signUpValues)
       .then((resp) => {
         console.log(resp);
         setRequisicaoEmProgresso(false);
@@ -33,6 +35,10 @@ const SignUp = () => {
           msg: resp.data.message,
           type: "success",
         }));
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
       })
       .catch((error) => {
         console.log(error);

@@ -1,0 +1,16 @@
+.form_cadastro_noticia > div > label > input,
+.form_cadastro_noticia > div > label > textarea,
+.select_category {
+  border: 1px solid var(--border-color-primaria);
+}
+
+.form_cadastro_noticia > div > label > textarea {
+  outline: none;
+  border-radius: 5px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  resize: vertical;
+  height: 300px;
+  min-height: 100px;
+}

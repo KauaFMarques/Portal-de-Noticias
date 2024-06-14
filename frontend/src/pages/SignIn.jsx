@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import HeaderSignInUp from "../components/HeaderSignInUp";
 import styles from "./SignIn.module.css";
 import Button from "../components/Button";
 import { axiosLocalApi } from "../utils/axiosInstance";
 import Message from "../components/Message";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
 
 const SignIn = () => {
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
   const [signInValues, setSignInValues] = useState({
     username: "",
     password: "",
@@ -21,15 +25,19 @@ const SignIn = () => {
 
     setRequisicaoEmProgresso(true);
     axiosLocalApi
-      .post("/user/login", signInValues)
+      .post("/login", signInValues)
       .then((resp) => {
-        console.log(resp);
+        console.log(resp.data);
+        localStorage.setItem("token", resp.data.user.token);
         setRequisicaoEmProgresso(false);
         setMessageConfig((prev) => ({
           ...prev,
           msg: resp.data.message,
           type: "success",
         }));
+        setUser(resp.data.user);
+
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);

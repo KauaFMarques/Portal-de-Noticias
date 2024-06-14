@@ -4,7 +4,10 @@ import styles from "./HeaderSignInUp.module.css";
 const HeaderSignInUp = ({ type }) => {
   return (
     <div className={styles.header_signup}>
-      <h1>Portal de Notícias</h1>
+      <Link to={"/"}>
+        <h1>Portal de Notícias</h1>
+      </Link>
+
       <div>
         <div
           style={{
@@ -36,7 +39,7 @@ const HeaderSignInUp = ({ type }) => {
         {type === "SignUp" && (
           <div style={{ marginTop: "10px" }}>
             <p style={{ color: "#55534f" }}>
-              É propriétario de um site de notícias?{" "}
+              Deseja publicar suas noticías no nosso site?{" "}
               <Link className={styles.link_join_us} to={"/register_site"}>
                 junte-se a nós
               </Link>

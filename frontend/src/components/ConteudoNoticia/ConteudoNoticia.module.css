@@ -1,0 +1,18 @@
+.conteudo_noticia {
+  h1 {
+    text-align: left;
+    margin: 0;
+    padding: 0;
+  }
+
+  h3 {
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+    margin-top: 20px;
+    font-size: 17px;
+  }
+}

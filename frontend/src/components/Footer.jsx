@@ -21,7 +21,7 @@ const Footer = () => {
       {location.pathname !== "/register" &&
         location.pathname !== "/login" &&
         location.pathname !== "/register_site" && (
-          <div className={styles.container_footer}>
+          <div className={`${styles.container_footer} flex_row`}>
             <div>
               <h1>Portal de Notícias</h1>
               <div className={styles.footer_team_credits}>
