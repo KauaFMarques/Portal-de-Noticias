@@ -6,9 +6,12 @@ import { categorysLabelValue } from "../../utils/categorys";
 import { Link } from "react-router-dom";
 import styles from "../Home.module.css";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import ModalDelete from "../../components/Modais/ModalDelete";
 
 const NoticiasPublicadas = () => {
   const [noticiasPublicadas, setNoticiasPublicadas] = useState([]);
+  const [modalOpened, setModalOpened] = useState(false);
+  const [dataDelete, setDataDelete] = useState(null);
   const { user } = useContext(UserContext);
 
   const fetchNoticias = useCallback(() => {
@@ -21,16 +24,17 @@ const NoticiasPublicadas = () => {
     });
   }, [user]);
 
-  const deletarNoticia = (idNoticia) => {
-    console.log(idNoticia);
+  const deletarNoticia = () => {
+    console.log(dataDelete);
 
     axiosLocalApi
-      .delete(`/excluirnoticia/${idNoticia}`)
+      .delete(`/excluirnoticia/${dataDelete}`)
       .then((resp) => {
         setNoticiasPublicadas((prev) =>
-          [...prev].filter((item) => item.id !== idNoticia)
+          [...prev].filter((item) => item.id !== dataDelete)
         );
         console.log(resp.data);
+        setModalOpened(false);
       })
       .catch((error) => {
         console.log(error);
@@ -43,6 +47,11 @@ const NoticiasPublicadas = () => {
 
   return (
     <div className="container_geral">
+      <ModalDelete
+        opened={modalOpened}
+        setOpened={setModalOpened}
+        deleteFunction={deletarNoticia}
+      />
       {noticiasPublicadas.map((item, index) => (
         <div className="hover_div" key={index} style={{ position: "relative" }}>
           <Link to={`/noticia/${item.id}`}>
@@ -79,7 +88,10 @@ const NoticiasPublicadas = () => {
               icon="material-symbols:delete"
               className="hover_div_2"
               height={25}
-              onClick={() => deletarNoticia(item.id)}
+              onClick={() => {
+                setDataDelete(item.id); // deletarNoticia(item.id);
+                setModalOpened(true);
+              }}
               style={{ color: "red", cursor: "pointer", padding: "10px" }}
             />
             <Link to={`/editar-noticia/${item.id}`}>

@@ -5,7 +5,6 @@ import Button from "../Button";
 import NavbarLateral from "./NavbarLateral";
 import { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import ButtonPublicar from "../Buttons/ButtonPublicar/ButtonPublicar";
 
 const Navbar = () => {
   const location = useLocation();
@@ -44,38 +43,15 @@ const Navbar = () => {
               menuLateralAberto={menuLateralAberto}
               setMenuLateralAberto={setMenuLateralAberto}
             />
-            <div className={styles.navbar_fixed_div}>
-              <div className={styles.navbar}>
-                <div
-                  className={styles.menu_hamburguer}
-                  onClick={() => setMenuLateralAberto(true)}
-                >
-                  <Icon
-                    width={40}
-                    icon="ic:round-menu"
-                    style={{ color: "#cacaca" }}
-                  />
-                </div>
-                <div className={styles.search_div}>
-                  <Icon
-                    icon="mi:search"
-                    style={{ color: "#707c89" }}
-                    width={21}
-                  />
-                  <input type="text" className={styles.input_search} />
-                </div>
-                <Link to={"/"}>
-                  <h1>Portal de Notícias</h1>
-                </Link>
-                {/* <button onClick={() => console.log(user)}>click</button> */}
-                {user && user.username && (
-                  <div className={styles.user_nav}>
-                    {user.user_type === 2 &&
-                      location.pathname !== "/publicar-noticia" && (
-                        <Link to={"/publicar-noticia"}>
-                          <ButtonPublicar />
-                        </Link>
-                      )}
+            <div className={styles.header_user}>
+              <div className={styles.header_user_links}>
+                <Link>Sobre</Link>
+                <Link>Contatos</Link>
+                <Link>Colunistas</Link>
+              </div>
+              {user && user.username && (
+                <div className={styles.user_nav}>
+                  <div className={styles.user_nav_hello}>
                     <p>
                       Olá, <span>{user.username}</span>
                     </p>
@@ -88,6 +64,16 @@ const Navbar = () => {
                     />
                     {subMenuUserAberto && (
                       <div ref={divSubMenu} className={styles.user_submenu}>
+                        {user.user_type === 2 && (
+                          <Link to={"/publicar-noticia"}>
+                            <Icon
+                              height={20}
+                              icon="bxs:pencil"
+                              style={{ color: "#000" }}
+                            />
+                            <p>Publicar Notícia</p>
+                          </Link>
+                        )}
                         <Link>
                           <Icon
                             icon="subway:mark-2"
@@ -131,20 +117,46 @@ const Navbar = () => {
                       </div>
                     )}
                   </div>
-                )}
+                </div>
+              )}
 
-                {(!user || typeof user !== "object") && (
-                  <div className={styles.nav_links}>
-                    <Link to={"/about"}>Sobre</Link>
-                    <Link to={"/login"}>Logar</Link>
-                    <Link to={"/register"} className="link_button">
-                      <Button
-                        style={{ marginLeft: "10px" }}
-                        msg={"Cadastre-se"}
-                      />
-                    </Link>
-                  </div>
-                )}
+              {(!user || typeof user !== "object") && (
+                <div className={styles.nav_links}>
+                  <Link to={"/login"}>Logar</Link>
+                  <Link to={"/register"} className="link_button">
+                    <Button
+                      style={{ marginLeft: "10px" }}
+                      msg={"Cadastre-se"}
+                    />
+                  </Link>
+                </div>
+              )}
+            </div>
+            <div className={styles.navbar_fixed_div}>
+              <div className={styles.navbar}>
+                <Link to={"/"}>
+                  <h1>Portal de Notícias</h1>
+                </Link>
+                <div className={styles.search_div}>
+                  <Icon
+                    icon="mi:search"
+                    style={{ color: "#707c89" }}
+                    width={21}
+                  />
+                  <input type="text" className={styles.input_search} />
+                </div>
+                <div
+                  className={styles.menu_hamburguer}
+                  onClick={() => setMenuLateralAberto(true)}
+                >
+                  <Icon
+                    width={40}
+                    icon="ic:round-menu"
+                    style={{ color: "#cacaca" }}
+                  />
+                </div>
+
+                {/* <button onClick={() => console.log(user)}>click</button> */}
               </div>
             </div>
 

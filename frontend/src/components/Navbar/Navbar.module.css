@@ -1,24 +1,56 @@
 .navbar_fixed_div {
-  position: fixed;
   width: 100%;
   z-index: 1;
   top: 0;
 }
 
 .navbar {
-  padding: 20px 30px;
+  padding: 20px 144px;
   background-color: #fff;
   position: relative;
   border-bottom: 1px solid var(--border-color-primaria);
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
+}
+
+.navbar > a > h1 {
+  font-size: 50px;
+}
+
+.header_user {
+  position: relative;
+  display: flex;
+  min-height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  background-color: #000000;
+  border-bottom: 1px solid var(--border-color-primaria);
+  padding: 0px 144px;
+}
+
+.user_nav_hello {
+  display: flex;
+  margin-right: -9px;
+  align-items: center;
+  position: relative;
+}
+
+.header_user_links {
+  a {
+    color: #fff;
+    margin-right: 20px;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 .nav_links,
 .user_nav {
   display: flex;
-  position: absolute;
   align-items: center;
   right: 145px;
   transition: all 0.2s;
@@ -58,8 +90,9 @@
   display: flex;
   flex-direction: column;
   align-items: start;
+  z-index: 2;
+  right: 0;
   top: 60px;
-  right: 10px;
   padding: 10px;
 
   & > a,
@@ -111,10 +144,11 @@
   padding: 5px 10px 7px 10px;
   transition: 0.2s;
   margin-left: 5px;
+  color: #fff;
 }
 
 .nav_links a:hover {
-  background-color: #f7f6f5;
+  text-decoration: underline;
 }
 
 h1 {
@@ -125,7 +159,7 @@ h1 {
 .search_div {
   width: 16%;
   position: absolute;
-  left: 145px;
+  right: 144px;
   transition: all 0.2s;
 }
 
@@ -146,7 +180,6 @@ h1 {
 }
 
 .sublinks_navbar {
-  margin-top: 86px;
   display: flex;
   justify-content: center;
   padding: 5px 0px 5px 0px;

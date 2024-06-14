@@ -23,6 +23,17 @@ const PublicarNoticia = () => {
     message: "",
   });
 
+  const limparCampos = () => {
+    setValuesNoticia({
+      titulo: "",
+      foto: "",
+      subtitulo: "",
+      noticia: "",
+      categoria_id: 1,
+      user_id: user.id,
+    });
+  };
+
   useEffect(() => {
     if (idParams) {
       axiosLocalApi
@@ -66,6 +77,8 @@ const PublicarNoticia = () => {
           message: data.message,
           type: "success",
         }));
+
+        limparCampos();
       })
       .catch((error) => {
         setMessageConfig((prev) => ({
